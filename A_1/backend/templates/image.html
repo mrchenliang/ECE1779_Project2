@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<head>
+    <title>Image by key</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/image.css') }}" />
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}" />
+</head> 
+<html>
+    <body>
+        {% include "navbar.html" %}
+        <h2>Image</h2>
+        <form method="post">
+            <label>Key:</label>
+            <input type="text" name="key_value" />
+            <br>
+            <input type="submit" value="Get Key" />
+        </form>
+        {% if image is defined %}
+          {% if exists %}
+            <h4>Image:</h4>
+            <img src= "data:image/png;base64,{{ image }}" alt={{image}}  class="image-preview"/>
+          {% else %}
+            <h4>Please enter a valid key, the image you are looking for does not exist</h4>
+          {% endif %}
+        {% endif %}
+    <body>    
+</html>

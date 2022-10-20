@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<head>
+    <title>Very simple memcache</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/cache_properties.css') }}" />
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}" />
+</head> 
+<html>
+    <body>
+        {% include "navbar.html" %}
+        <h2>Cache Properties</h2>
+        <form method="post" class="cache-form">
+            <input style="display:none" name="clear_cache">
+            <input
+                type="submit"
+                class="submit-button"
+                value="Clear Cache"
+            >
+        </form>
+        <form method="post" class="cache-form">
+            <label>Cache Configured: <b>{{ created_at }}</b></label><br><br>
+            <label for="max_capacity">Max Capacity:</label>
+            <input 
+                type="text"
+                name="max_capacity"
+                value="{{ max_capacity }}"
+                class="type-select"
+            > 
+            (MB, max 2000MB)
+            <label for="replacement_policy" class="label-padding">
+            <br>
+            Cache Replacement Policy:
+            </label>
+            {% if replacement_policy == "Least Recently Used" %}
+            <div class="replacement_options">
+                <input type="radio" name="replacement_policy" checked value="Least Recently Used">
+                <label for="lru">Least Recently Used</label>
+            </div>
+            <div class="replacement_options">
+                <input type="radio" name="replacement_policy" value="Random Replacement">
+                <label for="random">Random Replacement</label>
+            </div>
+            {% elif replacement_policy == "Random Replacement" %}
+            <div class="replacement_options">
+                <input type="radio" name="replacement_policy" value="Least Recently Used">
+                <label for="lru">Least Recently Used</label>
+            </div>
+            <div class="replacement_options">
+                <input type="radio" name="replacement_policy" checked value="Random Replacement">
+                <label for="random">Random Replacement</label>
+            </div>
+            {% else %}
+            <div class="replacement_options">
+                <input type="radio" name="replacement_policy" value="Least Recently Used">
+                <label for="lru">Least Recently Used</label>
+            </div>
+            <div class="replacement_options">
+                <input type="radio" name="replacement_policy" value="Random Replacement">
+                <label for="random">Random Replacement</label>
+            </div>
+            {% endif %}
+            <input
+                type="submit"
+                class="submit-button"
+                value="Set Cache"
+            >
+        </form>
+        <br>
+        <div style="text-align: center;">
+            {% if status is defined %}
+                {% if status == "CLEAR" %}
+                    <h4 style="color: green">Cache Cleared</h4>
+                {% elif status == "OK" %}
+                    <h4 style="color: green">Cache Properties Set</h4>
+                {% elif status == "INVALID" %}
+                    <h4 style="color: red">Invalid Cache Inputs</h4>
+                {% endif %}
+            {% endif %}
+        </div>
+    <body>    
+</html>

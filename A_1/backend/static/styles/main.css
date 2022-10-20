@@ -1,0 +1,107 @@
+/* define the font of the html*/
+*{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f2f2;
+}
+
+/* define the properties of the navbar*/
+.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 16px;
+  overflow: hidden;
+  width: 100vw;
+  background-color: #282A35;
+  display: flex;
+  justify-content: space-around;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+li a:hover:not(.active) {
+  background-color: #000000;
+}
+
+li a:active {
+  background-color: #4CAF50;
+}
+
+form {
+  min-width: 780px;
+  width: 60vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* define the properties of the input text box*/
+input[type=text] {
+  min-width: 250px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* define the properties of the file upload button*/
+input[type=file] {
+  min-width: 250px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* define the properties of the submit button*/
+input[type=submit] {
+  min-width: 250px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.image-preview {
+  border-radius: 5px;
+  padding: 20px;
+  background-color: gray;
+}
+
+div.status {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  text-align: center;
+}
+
+.replacement_options {
+  margin-top: 8px;
+}

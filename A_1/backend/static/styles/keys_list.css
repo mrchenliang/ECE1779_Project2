@@ -1,0 +1,42 @@
+/* define the properties of the key list table*/
+#keys {
+  border-collapse: collapse;
+  margin: 8px 0;
+  min-width: 300px;
+}
+
+#keys td, #keys th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#keys tr:nth-child(even){
+  background-color: white;
+}
+
+#keys tr:hover {
+  background-color: #ddd;
+}
+
+#keys th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #45a049;
+  color: white;
+}
+
+div {
+  text-align: left;
+  color: solid gray;
+}
+
+#keys tr:last-child td:first-child {
+  border: 1px solid #ddd;
+  border-bottom-left-radius: 5px;
+}
+
+#keys tr:last-child td:last-child {
+  border: 1px solid #ddd;
+  border-bottom-right-radius: 5px;
+}

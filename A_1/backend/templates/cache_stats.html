@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<head>
+    <title>Very simple memcache</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/cache_stats.css') }}" />
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}" />
+</head> 
+<html>
+    <body>
+        {% include "navbar.html" %}
+        <h2>Cache Stats</h2>
+        <div class="graph-grid">
+			<div class="graph-row">
+            {% if cache_count_graph is defined %}
+				<div class="graph">
+                	<h4>Cache Items Count Graph</h4>
+                	<img src= "data:image/png;base64, {{cache_count_graph}}" alt={{cache_count_graph}}  class="image-preview"/>
+				</div>
+            {% else %}
+                <div>Cache Items Graph Not Available</div>
+            {% endif %}
+            
+            
+            {% if cache_size_graph is defined %}
+				<div class="graph">
+                	<h4>Cache Size Graph (In Bytes)</h4>
+                	<img src= "data:image/png;base64, {{cache_size_graph}}" alt={{cache_size_graph}}  class="image-preview"/>
+				</div>
+            {% else %}
+                <div>Cache Size Graph Not Available</div>
+            {% endif %}
+			</div>
+			<div class="graph-row">
+            
+            {% if request_count_graph is defined %}
+				<div class="graph">
+                	<h4>Request Count Graph</h4>
+                	<img src= "data:image/png;base64, {{request_count_graph}}" alt={{request_count_graph}}  class="image-preview"/>
+				</div>
+            {% else %}
+                <div>Request Count Graph Not Available</div>
+            {% endif %}
+                        
+            {% if miss_graph is defined %}
+				<div class="graph">
+                	<h4>Miss Rate Graph</h4>
+                	<img src= "data:image/png;base64, {{miss_graph}}" alt={{miss_graph}}  class="image-preview"/>
+				</div>
+            {% else %}
+                <div>Miss Rate Graph Not Available</div>
+            {% endif %}
+			</div>
+            
+            {% if hit_graph is defined %}
+				<div class="graph">
+                	<h4>Hit Rate Graph</h4>
+                	<img src= "data:image/png;base64, {{hit_graph}}" alt={{hit_graph}}  class="image-preview"/>
+				</div>
+            {% else %}
+                <div>Hit Rate Graph Not Available</div>
+            {% endif %}
+        </div>
+    <body>    
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+    <title>Very simple memcache</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/upload_image.css') }}" />
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}" />
+</head> 
+<html>
+    <body>
+        {% include "navbar.html" %}
+        <h2>Upload Image</h2>
+        <form
+            class="form-outline"
+            method="post"
+            enctype=multipart/form-data
+        >
+            <label for="key">Insert Key:</label>
+            <input type="text" id="key" name="key">
+            <br>
+            <label>Upload Image:</label>
+            <input type="file" name="file" id="file" accept="image/*"/>
+            <br>
+            <input type="submit" id="submit">
+         {% if status is defined %}
+            <div class="status">
+                {% if status == "OK" %}
+                    <h4 style="color: green">Image Successfully Added</h4>
+                {% elif status == "FAILURE" %}
+                    <h4 style="color: rgb(172, 16, 16)">Database Failure - Image Not Added</h4>
+                {% elif status == "INVALID" %}
+                    <h4 style="color: rgb(172, 16, 16)">Image Type Not Supported</h4>
+                {% endif %}
+            </div>
+        {% endif %}
+    </form>
+    <body>    
+</html>
