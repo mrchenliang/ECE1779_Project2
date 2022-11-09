@@ -1,4 +1,4 @@
-from backend import webapp
+from frontend import webapp
 
 if __name__ == "__main__":
     webapp.run(port=5000, threaded=True)

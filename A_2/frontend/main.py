@@ -1,11 +1,11 @@
 import datetime, requests
 from flask import Flask, render_template, url_for, request, send_file, json, jsonify, g
-from backend.cache_helper import get_cache, set_cache
-from backend.database_helper import get_db
-from backend.constants import max_capacity, replacement_policy, memcache_host
-from backend.image_helper import convert_image_base64, process_image, add_image
-from backend.graph_helper import prepare_graph, plot_graph
-from backend import webapp
+from frontend.cache_helper import get_cache, set_cache
+from frontend.database_helper import get_db
+from frontend.constants import max_capacity, replacement_policy, memcache_host
+from frontend.image_helper import convert_image_base64, process_image, add_image
+from frontend.graph_helper import prepare_graph, plot_graph
+from frontend import webapp
 
 @webapp.before_first_request
 # initialize the cache configuration settings on first startup

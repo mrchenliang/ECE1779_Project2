@@ -1,6 +1,6 @@
 import mysql.connector
 from flask import g
-from backend.constants import db_config
+from frontend.constants import db_config
 
 def connect_to_database():
     # connect to the database

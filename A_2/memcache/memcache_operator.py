@@ -10,8 +10,8 @@ from datetime import datetime
 from sys import getsizeof
 
 from memcache import webapp, memcache, memcache_stat, memcache_config
-from backend.cache_helper import get_cache
-from backend.database_helper import get_db
+from frontend.cache_helper import get_cache
+from frontend.database_helper import get_db
 
 
 def random_replacement():

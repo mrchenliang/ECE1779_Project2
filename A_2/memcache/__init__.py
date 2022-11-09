@@ -2,7 +2,7 @@ from flask import Flask, current_app
 import mysql.connector
 import threading
 from datetime import datetime
-from backend.constants import db_config
+from frontend.constants import db_config
 
 webapp = Flask(__name__)
 

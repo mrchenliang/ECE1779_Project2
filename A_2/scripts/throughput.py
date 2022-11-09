@@ -7,7 +7,7 @@ readurl = "http://localhost:5000/api/key/cold"
 payload = {'key': 'hot'}
 files = [
     ('file', ('hot.jpeg', open(
-        '/Users/chenliang/Desktop/University of Toronto/Fall 2022/ECE1779/Assignements/ECE1779_Project1/backend/static/images/hot.jpeg',
+        '/Users/chenliang/Desktop/University of Toronto/Fall 2022/ECE1779/Assignements/ECE1779_Project1/frontend/static/images/hot.jpeg',
         'rb'), 'image/jpeg'))
 ]
 

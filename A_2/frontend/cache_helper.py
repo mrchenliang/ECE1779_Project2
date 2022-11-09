@@ -1,4 +1,4 @@
-from backend.database_helper import get_db
+from frontend.database_helper import get_db
 
 def get_cache():
     # get the cache properties from the database cache_properties
