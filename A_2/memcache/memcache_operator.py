@@ -1,6 +1,6 @@
 """
    @ Author: BrianQu
-   @ Update_date: 2022-10-12
+   @ Update_date: 2022-11-14
    @ Brief: Operator of the memcache backend
 """
 
@@ -12,6 +12,7 @@ from sys import getsizeof
 from memcache import webapp, memcache, memcache_stat, memcache_config
 from frontend.cache_helper import get_cache
 from frontend.database_helper import get_db
+from pytz import timezone
 
 
 def random_replacement():
@@ -191,3 +192,15 @@ def refresh_config_of_memcache():
         print("------Get configuration failed------")
         return False
 
+
+def push_statistics_metrics():
+    """
+    Store memcache statistic every 5 seconds using CloudWatch Custom Metrics
+    :return: None
+    """
+    eastern = timezone("US/Eastern")
+    current_time = datetime.now(eastern)
+
+    cloudwatch_client = boto3.client('cloudwatch',
+        aws_access_key_id=
+    )
