@@ -93,64 +93,6 @@ def upload_image():
         return render_template('upload_image.html', status=status)
     return render_template('upload_image.html')
 
-@webapp.route('/cache_properties', methods = ['GET','POST'])
-# returns the cache properties page
-def cache_properties():
-    # retrieve cache properties from the database
-    cache_properties = get_cache()
-    # if the cache properties is not None
-    if not cache_properties == None:
-        max_capacity = cache_properties[1]
-        replacement_policy = cache_properties[2]
-        created_at = cache_properties[3]
-    # otherwise, set the cache properties default
-    else:
-        max_capacity = 10
-        replacement_policy = 'Least Recently Used'
-        created_at = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    if request.method == 'POST':
-        # clears the memcache and returns the cache properties page
-        if not request.form.get("clear_cache") == None:
-            requests.post(memcache_host + '/clear_cache')
-            return render_template('cache_properties.html', max_capacity=max_capacity, replacement_policy=replacement_policy, created_at=created_at, status="CLEAR")
-        # set new memcache properties in the database and returns the cache properties page
-        else: 
-            new_max_capacity = request.form.get('max_capacity')
-            if new_max_capacity.isdigit() and int(new_max_capacity) <= 2000:
-                new_replacement_policy = request.form.get('replacement_policy')
-                created_at = set_cache(new_max_capacity, new_replacement_policy)
-                if not created_at == None:
-                    new_created_at = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    response = requests.post(memcache_host + '/refresh_configuration')
-                    if response.json() == 'OK':
-                        return render_template('cache_properties.html', max_capacity=new_max_capacity, replacement_policy=new_replacement_policy, created_at=new_created_at, status="OK")
-            return render_template('cache_properties.html', max_capacity=max_capacity, replacement_policy=replacement_policy, created_at=created_at, status="INVALID")
-    return render_template('cache_properties.html', max_capacity=max_capacity, replacement_policy=replacement_policy, created_at=created_at)
-
-@webapp.route('/cache_stats', methods = ['GET','POST'])
-# returns the cache stats page
-def cache_stats():
-    # get cache stats from the database cache_stats of the last 10 minutes
-    cnx = get_db()
-    cursor = cnx.cursor(dictionary=True)
-    stop_time = datetime.datetime.now()
-    start_time = stop_time - datetime.timedelta(minutes=10)
-    query = '''SELECT * FROM cache_stats WHERE cache_stats.created_at > %s and cache_stats.created_at < %s'''
-    cursor.execute(query, (start_time, stop_time,))
-    data = cursor.fetchall()
-    cnx.close()
-    # prepare x and y data points to plot from the returned query
-    (x_data, y_data) = prepare_graph(data)
-    
-    graph_image = {}
-    # plot the graphs using Matlab figures
-    for key, value in y_data.items():
-        graph_image[key] = plot_graph(x_data['x-axis'], value, key)
-    # returns the cache stats page
-    return render_template('cache_stats.html', cache_count_graph = graph_image['cache_count'], 
-                            request_count_graph = graph_image['request_count'], cache_size_graph = graph_image['cache_size'], 
-                             hit_graph = graph_image['hit_rate'], miss_graph = graph_image['miss_rate'])
-
 @webapp.route('/api/list_keys', methods=['POST'])
 # api end point to get a list of keys
 def list_keys():
