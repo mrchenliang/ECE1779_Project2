@@ -21,12 +21,5 @@ user_data = 'Content-Type: multipart/mixed; boundary="//"\n' \
             'Content-Disposition: attachment; filename="userdata.txt"\n' \
             '#!/bin/bash\n' \
             'screen\n' \
-            '/home/ubuntu/Desktop/ece1779a1/start.sh\n' \
+            '/home/ubuntu/Desktop/ECE1779_Project2/start.sh\n' \
             '--//'
-#elb target group ARN
-targetgroup = ''
-targetgroupARN = ''
-#elb
-loadbalancer = ''
-loadbalancerARN = ''
-loadbalancerDNS = ''

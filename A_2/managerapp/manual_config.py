@@ -5,7 +5,6 @@ from managerapp import config
 
 ec2 = boto3.resource('ec2')
 EC2 = boto3.client('ec2')
-elb = boto3.client('elbv2')
 CLOUDWATCH = boto3.client('cloudwatch')
 
 '''
@@ -38,10 +37,6 @@ def add_node():
         while status['InstanceStatuses'][0]['InstanceState']['Name'] != 'running':
             time.sleep(1)
             status = EC2.describe_instance_status(InstanceIds=[new_instance_id])
-        # Register the newly created ec2 to the elb
-        target = [{'Id': new_instance_id,
-                   'Port': 5000}, ]
-        elb.register_targets(TargetGroupArn=config.targetgroupARN, Targets=target)
         instance_pool.append(new_instance)
         error_msg = 'Expanding the pool by one node.'
         response = webapp.response_class(
@@ -88,9 +83,6 @@ def shrink_node():
     else:
         current_pool_size[0] -= 1
         terminate_id = instance_pool[-1]['InstanceId']
-        target = [{'Id': terminate_id,
-                   'Port': 5000}]
-        elb.deregister_targets(TargetGroupArn=config.targetgroupARN, Targets=target)
         ec2.instances.filter(InstanceIds=[terminate_id]).terminate()
         instance_pool.pop()
         error_msg = 'Shrinking the pool by one node.'
