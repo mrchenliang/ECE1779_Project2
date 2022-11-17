@@ -1,7 +1,8 @@
 db_config = {'user': 'admin',
-             'password': 'ece1779',
-             'host': '127.0.0.1',
-             'database': 'memcache'}
+             'password': 'ece1779group2',
+             'host': 'briandatabase.cls58pggr43c.us-east-1.rds.amazonaws.com',
+             'port': '3306',
+             'database': 'briandatabase'}
 
 
 max_capacity = 10
