@@ -1,8 +1,20 @@
-import base64, os, requests
-from frontend import IMAGE_FOLDER
-from frontend.constants import ALLOWED_EXTENSIONS, memcache_host
-
+import base64, os, requests, boto3, tempfile, json
+from botocore.config import Config
+from frontend.constants import ALLOWED_EXTENSIONS, memcache_host, aws_config
+from frontend.image import s3_storage_helper
 from frontend.database_helper import get_db
+
+
+config = Config(
+    region_name = 'us-east-1',
+    retries = {
+        'max_attempts': 10,
+        'mode': 'standard'
+    }
+)
+
+s3 = boto3.client('s3',config=config, aws_access_key_id= aws_config['aws_access_key_id'], aws_secret_access_key= aws_config['aws_secret_access_key'])
+
 
 def convert_image_base64(fp):
     # convert the image to Base64

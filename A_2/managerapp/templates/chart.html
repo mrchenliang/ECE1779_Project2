@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<head>
+  <title>Very simple memcache</title>
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='main.css') }}" />
+</head> 
+<html>
+  <body>
+    {% include "navbar.html" %}
+    <h2>Keys List</h2>
+    <table id="keys">
+      <label>Total Keys: {{ length }}</label>
+      <tr>
+        <th>Key </th>
+      <tr>
+      {% for key in keys %}
+        <tr>
+          <td>{{ key }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
