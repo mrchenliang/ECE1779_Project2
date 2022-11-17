@@ -7,4 +7,4 @@ webapp = Flask(__name__)
 
 IMAGE_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/static/images'
 
-from charts import main
+from managerapp import main

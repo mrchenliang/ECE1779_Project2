@@ -1,6 +1,7 @@
 cd A_2
-gunicorn --bind 0.0.0.0:5002 wsgi_memcache:webapp &
+gunicorn --bind 0.0.0.0:5002 wsgi_backend:webapp &
 gunicorn --bind 0.0.0.0:5001 wsgi_managerapp:webapp &
 gunicorn --bind 0.0.0.0:5000 wsgi_frontend:webapp &
+# python3 autoscaler.py
 
-echo "Frontend & Memcache Started"
+echo "Web Application Started"
