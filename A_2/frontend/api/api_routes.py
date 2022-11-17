@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from frontend.database_helper import get_db
-from frontend.image.image_helper import *
+from frontend.image.image_helper import download_image, save_image
 import requests
 
 api_routes = Blueprint('api_routes', __name__)
@@ -48,10 +48,13 @@ def key(key_value):
         request_json = {
             'key': key_value
         }
+        response = requests.get(backend_host + '/hash_key', json=request_json)
+        dictionary = json.loads(response.content.decode('utf-8'))
+        ip=dictionary[1]
         # get the image by key from the memcache
-        res = requests.post(memcache_host + '/get_from_memcache', json=request_json)
+        res = requests.post('http://' + str(ip) + '5000/get_from_memcache', json=request_json)
         # if the image is not by the key in the memcache
-        if res.text == 'Key Not Found':
+        if res.text == 'Key Not Found' or res == None:
             # queries the database images by specific key
             cnx = get_db()
             cursor = cnx.cursor(buffered=True)
@@ -62,15 +65,15 @@ def key(key_value):
                 location=str(cursor.fetchone()[0]) 
                 cnx.close()
                 # convert the image to Base64
-                base64_image = convert_image_base64(location)
+                image = download_image(location)
                 request_json = { 
-                    key_value: base64_image 
+                    key_value: image 
                 }
                 # put the key and image into the memcache
-                res = requests.post(memcache_host + '/put_into_memcache', json=request_json)
+                res = requests.post('http://'+ str(ip) + ':5000/put_into_memcache', json=request_json)
                 response = {
                     'success': 'true' , 
-                    'content': base64_image
+                    'content': image
                 }
                 return jsonify(response)
             else:
@@ -104,7 +107,7 @@ def upload():
     try:
         key = request.form.get('key')
         # add the image to the database
-        status = add_image(request, key)
+        status = save_image(request, key)
         if status == 'INVALID' or status == 'FAILURE':
             error_response = {
                 'success': 'false', 

@@ -23,6 +23,4 @@ aws_config = {
   'awss_secret_access_key': config['aws_secret_access_key']
 }
 
-memcache_host = "http://0.0.0.0:5001"
-
-ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif'}
+IMAGE_FOLDER = os.path.dirname(os.path.abspath(__file__)) + 'main/frontend/static/images'

@@ -1,6 +1,6 @@
 import base64, os, requests, boto3, tempfile, json
 from botocore.config import Config
-from frontend.constants import ALLOWED_EXTENSIONS, memcache_host, aws_config
+from frontend.constants import IMAGE_FOLDER, aws_config
 from frontend.image import s3_storage_helper
 from frontend.database_helper import get_db
 
@@ -15,6 +15,17 @@ config = Config(
 
 s3 = boto3.client('s3',config=config, aws_access_key_id= aws_config['aws_access_key_id'], aws_secret_access_key= aws_config['aws_secret_access_key'])
 
+backend_host = "http://localhost:5002"
+ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif'}
+
+def download_image(location):
+    with open('Temp.txt', 'wb') as file:
+        s3.download_fileobj('briansbucket', location, file)
+    with open('Temp.txt', 'rb') as file:
+        base64_image = file.read().decode('utf-8')
+    file.close()
+    os.remove("Temp.txt")
+    return base64_image
 
 def convert_image_base64(fp):
     # convert the image to Base64
@@ -24,19 +35,27 @@ def convert_image_base64(fp):
     return base64_image
 
 def process_image(request, key):
+    global backend_host
     # get the image file
     file = request.files['file']
     _, extension = os.path.splitext(file.filename)
     # if the image is one of the allowed extensions
     if extension.lower() in ALLOWED_EXTENSIONS:
         filename = key + extension
-        # save the image in the local file system
-        file.save(os.path.join(IMAGE_FOLDER, filename))
+        # save the image in the s3
+        print('uploading')
+        base64_image = base64.b64encode(file.read())
+        s3.put_object(Body=base64_image, Key=key, Bucket='briansbucket', ContentType='image')
+        print("uploaded")
+        
+        # post request to invalidate memcache by key
         request_json = {
             "key": key
         }
-        # post request to invalidate memcache by key
-        res = requests.post(memcache_host + '/invalidate_specific_key', json=request_json)
+        resp = requests.get(backend_host + '/hash_key', json=request_json)
+        dictionary = json.loads(resp.content.decode('utf-8'))
+        ip=dictionary[1]
+        res = requests.post('http://'+ str(ip) +':5000/invalidate_specific_key', json=request_json)
         # add the key and location to the database
         return add_image_to_db(key, filename)
     return 'INVALID'
@@ -66,7 +85,8 @@ def add_image_to_db(key, location):
     except:
         return 'FAILURE'
 
-def add_image(request, key):
+def save_image(request, key):
+    global backend_host
     try:
         # get the image file
         file = request.files['file']
@@ -74,13 +94,21 @@ def add_image(request, key):
         # if the image is one of the allowed extensions
         if extension.lower() in ALLOWED_EXTENSIONS:
             filename = key + extension
-            # save the image in the local file system
-            file.save(os.path.join(IMAGE_FOLDER, filename))
+            # save the image in the s3
+            print("uploading")
+            base64_image = base64.b64encode(file.read())
+            s3.put_object(Body=base64_image, Key=key, Bucket='briansbucket', ContentType='image')
+            print("uploaded")
+            
+            # post request to invalidate memcache by key
             request_json = {
                 "key": key
             }
+            resp = requests.get(backend_host + '/hash_key', json=request_json)
+            dictionary = json.loads(resp.content.decode('utf-8'))
+            ip=dictionary[1]
+            res = requests.post('http://'+ str(ip) +':5000/invalidate_specific_key', json=request_json)
             # post request to invalidate memcache by key
-            res = requests.post(memcache_host + '/invalidate_specific_key', json=request_json)
             # add the key and location to the database
             return add_image_to_db(key, filename)
         return 'INVALID'
