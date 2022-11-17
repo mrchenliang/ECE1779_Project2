@@ -117,8 +117,8 @@ def keys_list():
     else:
       return render_template('keys_list.html')
 
-@image_routes.route('/settings')
-def settings():
+@image_routes.route('/navigate')
+def navigate():
 	hostname = request.headers.get('Host').split(':')[0]
 	print(hostname)
 	return redirect('http://'+hostname + ':5001')

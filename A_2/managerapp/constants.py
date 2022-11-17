@@ -14,15 +14,5 @@ db_config = {'user': 'admin',
 #              'port': '3306',
 #              'database': 'briandatabase'}
 
-
 max_capacity = 10
 replacement_policy = 'Least Recently Used'
-
-aws_config = {
-  'aws_access_key_id': config['aws_access_key_id'],
-  'awss_secret_access_key': config['aws_secret_access_key']
-}
-
-memcache_host = "http://0.0.0.0:5001"
-
-ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif'}

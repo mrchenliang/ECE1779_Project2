@@ -1,10 +1,10 @@
 from flask import Flask, render_template, g
-from managerapp.cache import cache_routes
-from managerapp.stats import stats_routes
+from managerapp.memcache import memcache_routes
+from managerapp.stat import stat_routes
 
 webapp = Flask(__name__)
-webapp.register_blueprint(cache_routes)
-webapp.register_blueprint(stats_routes)
+webapp.register_blueprint(memcache_routes)
+webapp.register_blueprint(stat_routes)
 
 @webapp.teardown_appcontext
 # close out the db connection on shutdown
