@@ -29,17 +29,17 @@ CREATE TABLE IF NOT EXISTS `memcache`.`cache_properties` (
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS `memcache`.`cache_stats` ;
+DROP TABLE IF EXISTS `memcache`.`cache_policies` ;
 
-CREATE TABLE IF NOT EXISTS `memcache`.`cache_stats` (
+CREATE TABLE IF NOT EXISTS `memcache`.`cache_policies` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `cache_size` INT NOT NULL,
-  `key_count` INT NOT NULL,
-  `request_count` INT NOT NULL,
-  `hit_count` INT NOT NULL,
-  `miss_count` INT NOT NULL,
+  `max_miss_rate` FLOAT NOT NULL,
+  `min_miss_rate` FLOAT NOT NULL,
+  `expand_ratio` FLOAT NOT NULL,
+  `shrink_ratio` FLOAT NOT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
+  
 ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
@@ -56,22 +56,6 @@ INSERT INTO `memcache`.`images` (`key`, `location`) VALUES ('lakers', 'lakers.pn
 INSERT INTO `memcache`.`images` (`key`, `location`) VALUES ('heat', 'heat.png');
 INSERT INTO `memcache`.`images` (`key`, `location`) VALUES ('spurs', 'spurs.png');
 INSERT INTO `memcache`.`images` (`key`, `location`) VALUES ('suns', 'suns.png');
-
-COMMIT;
-
-START TRANSACTION;
-USE `memcache`;
-INSERT INTO `memcache`.`cache_stats` (`id`, `cache_size`, `key_count`, `request_count`, `hit_count`, `miss_count`) VALUES (1, 2, 5, 10, 1, 9);
-SELECT sleep(5);
-INSERT INTO `memcache`.`cache_stats` (`id`, `cache_size`, `key_count`, `request_count`, `hit_count`, `miss_count`) VALUES (2, 4, 15, 15, 6, 9);
-SELECT sleep(5);
-INSERT INTO `memcache`.`cache_stats` (`id`, `cache_size`, `key_count`, `request_count`, `hit_count`, `miss_count`) VALUES (3, 6, 20, 20, 9, 11);
-SELECT sleep(5);
-INSERT INTO `memcache`.`cache_stats` (`id`, `cache_size`, `key_count`, `request_count`, `hit_count`, `miss_count`) VALUES (4, 8, 12, 25, 8, 17);
-SELECT sleep(5);
-INSERT INTO `memcache`.`cache_stats` (`id`, `cache_size`, `key_count`, `request_count`, `hit_count`, `miss_count`) VALUES (5, 10, 17, 30, 7, 23);
-SELECT sleep(5);
-INSERT INTO `memcache`.`cache_stats` (`id`, `cache_size`, `key_count`, `request_count`, `hit_count`, `miss_count`) VALUES (6, 12, 25, 36, 10, 26);
 
 COMMIT;
 
