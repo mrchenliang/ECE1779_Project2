@@ -1,6 +1,6 @@
 import os, requests, json
 resp = requests.get("http://169.254.169.254/latest/user-data/")
-config = json.loads(resp.content.decode('utf-8'))
+conf_dict = json.loads(resp.content.decode('utf-8'))
 
 db_config = {'user': 'admin',
              'password': 'ece1779group2',
@@ -8,9 +8,9 @@ db_config = {'user': 'admin',
              'port': '3306',
              'database': 'briandatabase'}
              
-# db_config = {'user': config["MYSQL_USER"],
-#              'password': config["MYSQL_PASSWORD"],
-#              'host': config["MYSQL_HOST"],
+# db_config = {'user': conf_dict["MYSQL_USER"],
+#              'password': conf_dict["MYSQL_PASSWORD"],
+#              'host': conf_dict["MYSQL_HOST"],
 #              'port': '3306',
 #              'database': 'briandatabase'}
 
