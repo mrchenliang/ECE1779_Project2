@@ -10,13 +10,13 @@
             {%if pool_notification != "" %}
                 <form action="/clear_notification" method="post" class="notification">
                     <h4>Memcache Pool Changed</h4>
-                    <div class="form-row" style="line-height:20px; padding-bottom: 10px;">
+                    <div class="form-row">
                         Nodes Starting: {{ pool_notification['message']['starting'] }}
                     </div>
-                    <div class="form-row" style="line-height:20px; padding-bottom: 10px;">
+                    <div class="form-row">
                         Nodes Active: {{ pool_notification['message']['active'] }}
                     </div>
-                    <div class="form-row" style="line-height:20px; padding-bottom: 10px;">
+                    <div class="form-row">
                         Nodes Stopping: {{ pool_notification['message']['stopping'] }}
                     </div>
                     <input

@@ -4,16 +4,16 @@ import requests, time
 from flask import render_template, request, redirect
 from managerapp.database_helper import get_db
 
-cache_routes = Blueprint("memcache_routes", __name__)
+memcache_routes = Blueprint("memcache_routes", __name__)
 
 # Backend Host Port
 backend_host = 'http://localhost:5002'
 
-@cache_routes.route('/memcache_manager', methods=['GET'])
+@memcache_routes.route('/memcache_manager', methods=['GET'])
 def memcache_manager():
     cnx = get_db()
     capacity, replacement_policy, update_time, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
-    return render_template('memcache_manager.html',
+    return render_template('manager.html',
         capacity=capacity,
         replacement_policy=replacement_policy,
         update_time=update_time,
@@ -22,10 +22,9 @@ def memcache_manager():
         node_data=node_data,
         cache_policy=cache_policy)
 
-
-@cache_routes.route('/set_cache_params', methods = ['GET', 'POST'])
+@memcache_routes.route('/set_cache_params', methods = ['GET', 'POST'])
 def memcache_params():
-    global backend_app
+    global backend_host
     if request.method == 'POST':
         new_cap = request.form.get('capacity')
         if new_cap.isdigit() and int(new_cap) <= 500:
@@ -36,10 +35,10 @@ def memcache_params():
                 'replacement_policy': new_policy, 
                 'update_time': new_time
             }
-            resp = requests.post(backend_app + '/refreshConfiguration', json=req)
+            resp = requests.post(backend_host + '/refresh_configuration', json=req)
             capacity, replacement_policy, update_time, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
             if resp.json() == 'OK':
-                return render_template('memcache_manager.html',
+                return render_template('manager.html',
                 capacity=capacity,
                 replacement_policy=replacement_policy,
                 update_time=update_time,
@@ -50,7 +49,7 @@ def memcache_params():
              
         # On error, reset to old params
         capacity, replacement_policy, update_time, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
-        return render_template('memcache_manager.html',
+        return render_template('manager.html',
                 capacity=capacity,
                 replacement_policy=replacement_policy,
                 update_time=update_time,
@@ -62,7 +61,7 @@ def memcache_params():
         
     # On GET
     capacity, replacement_policy, update_time, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
-    return render_template('memcache_manager.html',
+    return render_template('manager.html',
             capacity=capacity,
             replacement_policy=replacement_policy,
             update_time=update_time,
@@ -70,16 +69,14 @@ def memcache_params():
             pool_params=pool_params,
             node_data=node_data,
             cache_policy=cache_policy)
-    
-    
 
-@cache_routes.route('/clear_cache', methods=['GET', 'POST'])
+@memcache_routes.route('/clear_cache', methods=['GET', 'POST'])
 def clear_cache():
-    global backend_app
+    global backend_host
     if request.method == 'POST':
-        res = requests.post(backend_app + '/clear_cache_pool')
+        res = requests.post(backend_host + '/clear_cache_pool')
     capacity, replacement_policy, update_time, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
-    return render_template('memcache_manager.html',
+    return render_template('manager.html',
         capacity=capacity,
         replacement_policy=replacement_policy,
         update_time=update_time,
@@ -88,13 +85,13 @@ def clear_cache():
         node_data=node_data,
         cache_policy=cache_policy)
 
-@cache_routes.route('/clear_data', methods=['GET', 'POST'])
+@memcache_routes.route('/clear_data', methods=['GET', 'POST'])
 def clear_data():
-    global backend_app
+    global backend_host
     if request.method == 'POST':
-        res = requests.post(backend_app + '/clear_data')
+        res = requests.post(backend_host + '/clear_data')
     capacity, replacement_policy, update_time, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
-    return render_template('memcache_manager.html',
+    return render_template('manager.html',
         capacity=capacity,
         replacement_policy=replacement_policy,
         update_time=update_time,
@@ -104,9 +101,9 @@ def clear_data():
         cache_policy=cache_policy)
 
 
-@cache_routes.route('/set_pool_config', methods=['GET', 'POST'])
+@memcache_routes.route('/set_pool_config', methods=['GET', 'POST'])
 def set_pool_config():
-    global backend_app
+    global backend_host
     if request.method == 'POST':
         if request.form.get("mode") == 'Manual Mode':
             
@@ -115,10 +112,10 @@ def set_pool_config():
             pool_params = {
                 'mode': 'manual',
             }
-            requests.post(backend_app + "/setCachePoolConfig", json=pool_params)
+            requests.post(backend_host + "/set_cache_pool_config", json=pool_params)
             capacity, replacement_policy, update_time, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
 
-            return render_template('memcache_manager.html',
+            return render_template('manager.html',
                 capacity=capacity,
                 replacement_policy=replacement_policy,
                 update_time=update_time,
@@ -148,11 +145,11 @@ def set_pool_config():
                     pool_params = {
                         'mode': 'automatic',
                     }
-                    requests.post(backend_app + "/setCachePoolConfig", json=pool_params)
+                    requests.post(backend_host + "/set_cache_pool_config", json=pool_params)
                 
                     cache_policy = [0, max_miss_rate, min_miss_rate, exp_ratio, shrink_ratio]
                     capacity, replacement_policy, update_time, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings(cache_policy)
-                    return render_template('memcache_manager.html',
+                    return render_template('manager.html',
                         capacity=capacity,
                         replacement_policy=replacement_policy,
                         update_time=update_time,
@@ -162,7 +159,7 @@ def set_pool_config():
                         cache_policy=cache_policy,
                         pool_status="TRUE")
         capacity, replacement_policy, update_time, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
-        return render_template('memcache_manager.html',
+        return render_template('manager.html',
             capacity=capacity,
             replacement_policy=replacement_policy,
             update_time=update_time,
@@ -174,7 +171,7 @@ def set_pool_config():
 
 
     capacity, replacement_policy, update_time, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
-    return render_template('memcache_manager.html',
+    return render_template('manager.html',
         capacity=capacity,
         replacement_policy=replacement_policy,
         update_time=update_time,
@@ -185,8 +182,8 @@ def set_pool_config():
 
 
 def format_cache_settings(cache_policy=None):
-    global backend_app
-    res = requests.get(backend_app + '/getCacheInfo')
+    global backend_host
+    res = requests.get(backend_host + '/get_cache_info')
     memcache_pool = res.json()['memcache_pool']
     capacity = res.json()['cache_params']['max_capacity']
     replacement_policy = res.json()['cache_params']['replacement_policy']
@@ -245,9 +242,9 @@ def navigate():
 
 def manual_update_pool(cmd):
     if cmd == 'increase':
-        resp = requests.post(backend_app + '/startInstance')
+        resp = requests.post(backend_host + '/start_instance')
     else:
-        resp = requests.post(backend_app + '/stopInstance')
+        resp = requests.post(backend_host + '/stop_instance')
 
 def is_float(value):
   try:

@@ -102,9 +102,16 @@ div.status {
   text-align: center;
 }
 
+div.form-row {
+  line-height:20px; 
+  padding-bottom: 10px
+}
+
 .replacement_options {
   margin-top: 8px;
 }
+
+
 
 
 /* define the properties of the key list table*/
