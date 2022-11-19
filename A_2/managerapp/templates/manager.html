@@ -6,7 +6,278 @@
 </head> 
 <html>
     <body>
+        <script type="text/javascript">
+            // Initialize the echarts instance based on the prepared dom
+            var myChart = echarts.init(document.getElementById('memcachePool'));
+            var memcache_pool = JSON.parse('{{ memcache_pool | tojson | safe}}')
+            var pool_params = JSON.parse('{{ pool_params | tojson | safe}}')
+            
+            if (pool_params['mode'] == 'automatic') {
+                document.getElementById("manual_pool").style.display="none";
+                document.getElementById("auto_pool").style.display="block";
+                var cache_policy = JSON.parse('{{ cache_policy | tojson | safe}}')
+                document.getElementById("maxMiss").value = cache_policy[1]
+                document.getElementById("minMiss").value = cache_policy[2]
+                document.getElementById("expansionRatio").value = cache_policy[3]
+                document.getElementById("shrinkRatio").value = cache_policy[4]
+
+            }
+      
+            // Specify the configuration items and data for the chart
+            var option = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                series: [
+                    {
+                    name: 'Active Memcache Nodes',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    color: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: memcache_pool
+                    }
+                ]};
+      
+            // Display the chart using the configuration items and data just specified.
+            myChart.setOption(option);
+
+            function showManual() {
+                document.getElementById("manual_pool").style.display="block";
+                document.getElementById("auto_pool").style.display="none";
+            }
+
+            function showAuto() {
+                document.getElementById("manual_pool").style.display="none";
+                document.getElementById("auto_pool").style.display="block";
+            }
+        </script>
         {% include "navbar.html" %}
-        <h2>Memcache Manager UI</h2>
+        <h2>Memcache Manager Application</h2>
+        <form method="post" class="cache-form" action="/set_cache">
+            <h4>Memcache Configuration</h4>
+            <label>Cache Configured: <b>{{ created_at }}</b></label><br><br>
+            <label for="max_capacity">Max Capacity:</label>
+            <input 
+                type="text"
+                name="max_capacity"
+                value="{{ max_capacity }}"
+                class="type-select"
+            > 
+            (MB, max 2000MB)
+            <label for="replacement_policy" class="label-padding">
+            <br>
+            Memcache Replacement Policy:
+            </label>
+            {% if replacement_policy == "Least Recently Used" %}
+            <div class="replacement_options">
+                <input type="radio" name="replacement_policy" checked value="Least Recently Used">
+                <label for="lru">Least Recently Used</label>
+            </div>
+            <div class="replacement_options">
+                <input type="radio" name="replacement_policy" value="Random Replacement">
+                <label for="random">Random Replacement</label>
+            </div>
+            {% elif replacement_policy == "Random Replacement" %}
+            <div class="replacement_options">
+                <input type="radio" name="replacement_policy" value="Least Recently Used">
+                <label for="lru">Least Recently Used</label>
+            </div>
+            <div class="replacement_options">
+                <input type="radio" name="replacement_policy" checked value="Random Replacement">
+                <label for="random">Random Replacement</label>
+            </div>
+            {% else %}
+            <div class="replacement_options">
+                <input type="radio" name="replacement_policy" value="Least Recently Used">
+                <label for="lru">Least Recently Used</label>
+            </div>
+            <div class="replacement_options">
+                <input type="radio" name="replacement_policy" value="Random Replacement">
+                <label for="random">Random Replacement</label>
+            </div>
+            {% endif %}
+            <input
+                type="submit"
+                class="submit-button"
+                value="Set Cache"
+            >
+        </form>
+        <br>
+        <div style="text-align: center;">
+            {% if status is defined %}
+                {% if status == "CLEAR" %}
+                    <h4 style="color: green">Cache Cleared</h4>
+                {% elif status == "OK" %}
+                    <h4 style="color: green">Cache Properties Set</h4>
+                {% elif status == "INVALID" %}
+                    <h4 style="color: red">Invalid Cache Inputs</h4>
+                {% endif %}
+            {% endif %}
+        </div>
+        <br>
+        <form method="post" class="cache-form" action="/clear_cache">
+            <h4>Memcache Control</h4>
+            <label>Clear Memcache Data</label>
+            <input style="display:none" name="clear_cache">
+            <input
+                type="submit"
+                class="submit-button"
+                value="Clear Cache"
+            >
+        </form>
+        <form method="post" class="cache-form" action="/clear_data">
+            <h4>Data Control</h4>
+            <label>Clear Application Data</label>
+            <input style="display:none" name="clear_data">
+            <input
+                type="submit"
+                class="submit-button"
+                value="Clear Data"
+            >
+        </form>
+        <br>
+        <h4>Pool Configuration</h4>
+        <form method="post" class="cache-form" action="/set_pool_config">
+            <h4>Select Memcache Pool Resizing</h4>
+            {% if pool_params['mode'] == 'manual' %}
+                <div>
+                    <input type="radio" id="manual" name="mode" value="Manual Mode" checked onclick="showManual()">
+                    <label for="manual">Manual Mode</label>
+                </div>
+                <div>
+                    <input type="radio" id="automtic" name="mode" value="Automatic Mode" onclick="showAuto()">
+                    <label for="automtic">Automatic Mode</label>
+                </div>
+            {% else if pool_params['mode'] == 'automatic'  %}
+                <div>
+                    <input type="radio" id="manual" name="mode" value="Manual Mode" onclick="showManual()">
+                    <label for="manual">Manual Mode</label>
+                </div>
+                <div>
+                    <input type="radio" id="automtic" name="mode" value="Automatic Mode" checked onclick="showAuto()">
+                    <label for="automtic">Automatic Mode</label>
+                </div>
+            {% else %}
+                <div>
+                    <input type="radio" id="manual" name="mode" value="Manual Mode" onclick="showManual()">
+                    <label for="manual">Manual Mode</label>
+                </div>
+                <div>
+                    <input type="radio" id="automtic" name="mode" value="Automatic Mode" onclick="showAuto()">
+                    <label for="automtic">Automatic Mode</label>
+                </div>
+            {% endif %}
+            {% set item_count = memcache_pool|length %} 
+            <div id="manual_pool" style="display: block;">
+                <h4>Adjust Pool Size</h4>
+                <div class="form-row">
+                    <button
+                        id="increase_button"
+                        class="submit-button"
+                        style="margin: 3px"
+                        type="submit"
+                        name="pool-button"
+                        value="increase"
+                        {% if item_count == 8 %} disabled {% endif %}
+                    >
+                    +1
+                    </button>
+                    <button
+                        id="decrease_button"
+                        class="submit-button"
+                        style="margin: 3px"
+                        type="submit"
+                        name="pool-button"
+                        value="decrease"
+                        {% if node_data["active"] + node_data["starting"] == 1 %} disabled {% endif %}
+                    >
+                    -1
+                    </button>
+                </div>
+                <input
+                    type="submit"
+                    id="set_pool_size"
+                    name="manual"
+                    class="submit-button"
+                    style="width: 150px;"
+                    value="Set to Manual Mode"
+                >
+            </div>
+
+            <div id="auto_pool" style="display: none; width:230px">
+                <h4>Set Policy</h4>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="maxMiss">Max Miss Rate (%): </label>
+                        <label for="minMiss">Min Miss Rate (%): </label>
+                        <label for="expansionRatio">Expansion Ratio: </label>
+                        <label for="shrinkRatio">Shrink Ratio: </label>
+                    </div>
+                    <div class="form-col">
+                        <input 
+                            type="text"
+                            id="maxMiss"
+                            name="maxMiss"
+                            value="{{ maxMiss }}"
+                            class="type-select-mini">
+                        <input 
+                            type="text"
+                            id="minMiss"
+                            name="minMiss"
+                            value="{{ minMiss }}"
+                            class="type-select-mini">
+                        <input 
+                            type="text"
+                            id="expansionRatio"
+                            name="expansionRatio"
+                            value="{{ expansionRatio }}"
+                            class="type-select-mini">
+                        <input 
+                            type="text"
+                            id="shrinkRatio"
+                            name="shrinkRatio"
+                            value="{{ shrinkRatio }}"
+                            class="type-select-mini">
+                    </div>
+                </div>
+                <input
+                    type="submit"
+                    id="set_pool_size"
+                    class="submit-button"
+                    style="width: 150px;"
+                    value="Set Configuration">
+            </div>
+            <div style="text-align: center;">
+                {% if pool_status is defined %}
+                    {% if pool_status == "FALSE" %}
+                        <h4 style="color: red">Invalid Values</h4>
+                    {% else %}
+                        <h4 style="color: green">Policy Updated</h4>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div style="margin-left: 20px">
+                <h4>Memcache Pool Node Status</h4>
+                Number of Active Nodes: <b>{{ node_data["active"] }}</b><br/>
+                Number of Nodes Starting: <b>{{ node_data["starting"] }} </b><br/>
+                Number of Nodes Shutting Down: <b>{{ node_data["stopping"] }} </b><br/>
+                <div id="memcachePool" style="width: 300px;height:350px;"></div>
+            </div>
+        </form>
+
     <body>    
 </html>

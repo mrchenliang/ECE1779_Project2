@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `memcache`.`cache_policies` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `max_miss_rate` FLOAT NOT NULL,
   `min_miss_rate` FLOAT NOT NULL,
-  `expand_ratio` FLOAT NOT NULL,
+  `expansion_ratio` FLOAT NOT NULL,
   `shrink_ratio` FLOAT NOT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
