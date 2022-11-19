@@ -1,8 +1,8 @@
 import requests
 from concurrent.futures import ThreadPoolExecutor
 
-writeurl = "http://localhost:5000/api/upload?key=hot&file"
-readurl = "http://localhost:5000/api/key/cold"
+writeurl = "http://0.0.0.0:5000/api/upload?key=hot&file"
+readurl = "http://0.0.0.0:5000/api/key/cold"
 
 payload = {'key': 'hot'}
 files = [

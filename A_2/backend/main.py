@@ -144,7 +144,7 @@ def ready_request():
     notify = node_states()
     jsonReq={"message":notify}
     try:
-        resp = requests.post("http://localhost:5000/show_notification", json=jsonReq)
+        resp = requests.post("http://0.0.0.0:5000/show_notification", json=jsonReq)
     except:
         print("Frontend not started yet")
     return get_cache_response()
@@ -159,7 +159,7 @@ def start_instance():
         notify = node_states()
         jsonReq={"message":notify}
         try:
-            resp = requests.post("http://localhost:5000/show_notification", json=jsonReq)
+            resp = requests.post("http://0.0.0.0:5000/show_notification", json=jsonReq)
         except:
             print("Frontend not started yet")
         AWS_EC2_operator.start_instance(instance_id)
@@ -177,7 +177,7 @@ def stop_instance():
         notify = node_states()
         jsonReq={"message":notify}
         try:
-            resp = requests.post("http://localhost:5000/show_notification", json=jsonReq)
+            resp = requests.post("http://0.0.0.0:5000/show_notification", json=jsonReq)
         except:
             print("Frontend not started yet")
         AWS_EC2_operator.shutdown_instance(instance_id)
