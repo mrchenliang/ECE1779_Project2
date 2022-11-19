@@ -11,8 +11,8 @@ memcache_pool = {
     "i-0a7a70f7ed4da4cbc": None,
     "i-0f2bcbfa2224b03df": None
 }
-from managerapp import backend_client
-from managerapp.statistics_server import thread_stats
+from backend import main
+from backend.AWS_Log_operator import thread_stats
 
 th = threading.Thread(target=thread_stats)
 th.start()
