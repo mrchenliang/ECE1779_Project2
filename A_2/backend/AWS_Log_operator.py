@@ -1,6 +1,6 @@
 import requests
 import boto3, time, datetime, json
-from frontend.constants import aws_config
+# from frontend.constants import aws_config
 from backend import memcache_pool
 
 # log_client = boto3.client('logs', region_name="us-east-1", aws_access_key_id=aws_config['aws_access_key_id'], aws_secret_access_key=aws_config['aws_secret_access_key'])

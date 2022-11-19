@@ -18,7 +18,7 @@ def clear_images():
     Using this function to clear all images
     :return: bool
     """
-    s3_clear = boto3.resource('s3',config=my_aws_config,aws_access_key_id= aws_config['aws_access_key_id'], aws_secret_access_key= aws_config['aws_secret_access_key'])
+    s3_clear = boto3.resource('s3',config=my_aws_config)
     bucket = s3_clear.Bucket('briansbucket')
     bucket.objects.all().delete()
     return True
@@ -40,7 +40,7 @@ def upload_file(file_name, bucket, s3=None, object_name=None):
 
     # upload the file
     if s3 is None:
-        s3 = boto3.client('s3',config=my_aws_config,aws_access_key_id= aws_config['aws_access_key_id'], aws_secret_access_key= aws_config['aws_secret_access_key'])
+        s3 = boto3.client('s3',config=my_aws_config)
         print("s3 client created")
     try:
         response = s3.upload_file(Filename=file_name, Bucket=bucket, Key=object_name)
@@ -60,7 +60,7 @@ def download_file(key,bucket='briansbucket',s3=None):
     :return: bool or base64 encoded image
     """
     if s3 is None:
-        s3 = boto3.client('s3',config=my_aws_config,aws_access_key_id= aws_config['aws_access_key_id'], aws_secret_access_key= aws_config['aws_secret_access_key'])
+        s3 = boto3.client('s3',config=my_aws_config)
         print("s3 client created")
     try:
         with open('Temp.txt', 'r+b') as file:

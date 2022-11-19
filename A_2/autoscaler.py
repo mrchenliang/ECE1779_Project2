@@ -8,10 +8,10 @@ memcache_node = ["i-0ca59c2326be01a9b","i-034ee52984dc9bd2e","i-0972b8c8d8d577ec
 resp = requests.get("http://169.254.169.254/latest/user-data")
 config = json.loads(resp.content.decode('utf-8'))
 
-aws_config = {
-  'aws_access_key_id': config['aws_access_key_id'],
-  'awss_secret_access_key': config['aws_secret_access_key']
-}
+# aws_config = {
+#   'aws_access_key_id': config['aws_access_key_id'],
+#   'awss_secret_access_key': config['aws_secret_access_key']
+# }
 
 db_config = {'user': config["MySQL_user"],
              'password': config["MySQL_password"],
@@ -27,8 +27,8 @@ my_aws_config = Config(
     }
 )
 
-log_client = boto3.client('logs', region_name="us-east-1", aws_access_key_id=aws_config['aws_access_key_id'], aws_secret_access_key=aws_config['aws_secret_access_key'])
-ec2_client = boto3.client('ec2', config=my_aws_config,aws_access_key_id= aws_config['aws_access_key_id'], aws_secret_access_key= aws_config['aws_secret_access_key'])
+log_client = boto3.client('logs', region_name="us-east-1")
+ec2_client = boto3.client('ec2', config=my_aws_config)
 backend = 'http://localhost:5002'
 
 
