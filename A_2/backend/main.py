@@ -31,7 +31,7 @@ def get_response(input=False):
 
 
 def get_cache_response():
-    cache_params = get_cache_params()
+    cache_params = get_memcache_properties()
     response = webapp.response_class(
         response=json.dumps(cache_params),
         status=200,
@@ -41,7 +41,7 @@ def get_cache_response():
     return response
 
 
-def get_cache_params():
+def get_memcache_properties():
     """ Get the most recent cache configuration parameters
     from the database
     Return: cache_params row
@@ -49,14 +49,14 @@ def get_cache_params():
     try:
         cnx = get_db()
         cursor = cnx.cursor(buffered = True)
-        query = '''SELECT * FROM cache_properties WHERE param_key = (SELECT MAX(param_key) FROM cache_properties LIMIT 1)'''
+        query = '''SELECT * FROM cache_properties WHERE id = (SELECT MAX(id) FROM cache_properties LIMIT 1)'''
         cursor.execute(query)
         if(cursor._rowcount):# if key exists in db
             cache_params=cursor.fetchone()
             cache_dict = {
-                'update_time': cache_params[3],
+                'created_at': cache_params[3],
                 'max_capacity': cache_params[1],
-                'replacement_policy': cache_params[2]
+                'replacement_method': cache_params[2]
             }
             return cache_dict
         return None
@@ -105,6 +105,29 @@ def get_active_node():
         if not ip == None and not ip == 'Stopping':
             return id
     return None
+
+
+def set_cache_properties(cache_properties):
+    try:
+        cnx = get_db()
+        cursor = cnx.cursor(buffered = True)
+        query_add = ''' INSERT INTO cache_properties (created_at, max_capacity, replacement_method) VALUES (%s,%s,%s)'''
+        cursor.execute(query_add,(cache_properties['created_at'], cache_properties['max_capacity'], cache_properties['replacement_method']))
+        cnx.commit()
+        return True
+    except:
+        return None
+
+
+def total_active_node():
+    global memcache_pool
+    count=0
+    active_list=[]
+    for id, ip in memcache_pool.items():
+        if not ip == None and not ip == 'Stopping' and not ip == "Starting":
+            count+=1
+            active_list.append((id,ip))
+    return count, active_list
 
 
 @webapp.route('/', methods=['GET', 'POST'])
@@ -162,10 +185,125 @@ def stop_instance():
 
 
 @webapp.route('/getCacheInfo', methods = ['GET', 'POST'])
+def get_cache_info():
+    """
+    Using the function to get all cache information including parameters and active instances to the frontend
+    """
+    global memcache_pool, pool_params
+    cache_params = get_memcache_properties()
+    data = {
+        'memcache_pool': memcache_pool,
+        'cache_params': cache_params,
+        'pool_params': pool_params 
+    }
+
+    return webapp.response_class(
+        response=json.dumps(data),
+        status=200,
+        mimetype='application/json'
+    )
 
 
+@webapp.route('/refreshConfiguration', methods = ['GET', 'POST'])
+def refresh_configuration():
+    global memcache_pool
+    cache_params = request.get_json(force=True)
+    # Save to DB
+    resp = set_cache_properties(cache_params)
+    if resp == True:
+        for host in memcache_pool:
+            ipv4 = memcache_pool[host]
+            if not ipv4 == None and not ipv4 in STATES: 
+                # If an address is starting up, it will be set once it is ready
+                address = 'http://' + str(ipv4) + ':5000/refreshConfiguration'
+                res = requests.post(address, json=cache_params)
+
+    return webapp.response_class(
+            response = json.dumps("OK"),
+            status=200,
+            mimetype='application/json'
+    )
 
 
+@webapp.route('/setMemcachePoolConfig', methods = ['GET', 'POST'])
+def set_memcache_pool_config():
+    global pool_params
+    pool_params = request.get_json(force = True)
+    return webapp.response_class(
+            response = json.dumps("OK"),
+            status=200,
+            mimetype='application/json'
+    )
 
 
+@webapp.route('/getMemcachePoolConfig', methods = ['GET', 'POST'])
+def get_memcache_pool_config():
+    global pool_params
+    
+    return webapp.response_class(
+            response = json.dumps(pool_params),
+            status=200,
+            mimetype='application/json'
+    )
 
+
+@webapp.route('/clearMemcachePoolContent', methods = ['GET', 'POST'])
+def clear_memcache_pool_content():
+    for host in memcache_pool:
+        ipv4 = memcache_pool[host]
+        if not ipv4 == None and not ipv4 in stat:
+            print('IP ' + ipv4)
+            # Only need to clear active ports
+            address = 'http://' + str(ipv4) + ':5000/clear_cache'
+            res = requests.post(address)
+
+    return webapp.response_class(
+            response = json.dumps("OK"),
+            status=200,
+            mimetype='application/json'
+    )
+
+
+@webapp.route('/clearData', methods = ['GET', 'POST'])
+def clear_data():
+    cnx = get_db()
+    cursor = cnx.cursor(buffered = True)
+    query_del = ''' DELETE * from images; '''
+    cursor.execute(query_del)
+    cnx.commit()
+
+    clear_images()
+    return webapp.response_class(
+            response = json.dumps("OK"),
+            status=200,
+            mimetype='application/json'
+    )
+
+
+@webapp.route('/hashKeyRoute', methods = ['GET', 'POST'])
+def hash_key_route():
+    json_obj = request.get_json(force=True)
+    key = json_obj['keyReq']
+    hash_val = hashlib.md5(key.encode()).hexdigest()
+    hash_val = int(hash_val, base=16)
+    index = (hash_val % 16)+1
+    active_node,active_list = total_active_node()
+    memcache_no = index % active_node
+    return webapp.response_class(
+            response = json.dumps(active_list[memcache_no]),
+            status=200,
+            mimetype='application/json'
+    )
+
+
+cache_properties = {
+    'created_at': time.time(),
+    'max_capacity': 10,
+    'replacement_method': 'Least Recently Used'
+}
+
+
+set_cache_properties(cache_properties)
+startup_count = AWS_EC2_operator.update_memcachepool_status()
+if startup_count == 0:
+    start_instance()
