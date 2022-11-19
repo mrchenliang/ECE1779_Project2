@@ -27,12 +27,12 @@ def call_ready_request():
         print(instance_id)
 
         host_ip_address = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
-        address = 'http://' + str(host_ip_address) + ':5002/readyRequest'
-        jsonReq = {
+        address = 'http://' + str(host_ip_address) + ':5002/ready_request'
+        req_json = {
             "ip_address": instance_ip_address,
             "instance_id": instance_id
         }
-        res = requests.post(address, json=jsonReq)
+        res = requests.post(address, json=req_json)
         print("Cache Parameter Response")
         print(res.content.decode("utf-8"))
         return res.content.decode("utf-8")
