@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 import random
 import time
 import json
-from frontend.constants import aws_config
+# from frontend.constants import aws_config
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ my_aws_config = Config(
     }
 )
 
-cloudwatch_client = boto3.client('cloudwatch', config=my_aws_config,aws_access_key_id= aws_config['aws_access_key_id'], aws_secret_access_key= aws_config['aws_secret_access_key'])
+cloudwatch_client = boto3.client('cloudwatch', config=my_aws_config)
 
 class CloudWatchWrapper:
     """Encapsulates Amazon CloudWatch functions."""
