@@ -27,7 +27,6 @@ def get_image(image):
 @image_routes.route('/image', methods = ['GET','POST'])
 # returns the view image page
 def image():
-    global memcache_host
     if request.method == 'POST':
         key_value = request.form.get('key_value')
         # get the image by key from the memcache

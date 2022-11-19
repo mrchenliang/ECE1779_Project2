@@ -8,9 +8,6 @@ api_routes = Blueprint('api_routes', __name__)
 # Backend Host Port
 backend_host = 'http://localhost:5002'
 
-# Memcache host port
-memcache_host = 'http://localhost:5001'
-
 @api_routes.route('/api/list_keys', methods=['POST'])
 # api end point to get a list of keys
 def list_keys():
