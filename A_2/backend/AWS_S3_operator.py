@@ -63,9 +63,9 @@ def download_file(key,bucket='briansbucket',s3=None):
         s3 = boto3.client('s3',config=my_aws_config,aws_access_key_id= aws_config['aws_access_key_id'], aws_secret_access_key= aws_config['aws_secret_access_key'])
         print("s3 client created")
     try:
-        with open('Temp.txt', 'r+b') as f:
-            s3.download_file(Bucket=bucket, Key=key, f)
-            base64_image = f.read().decode('utf-8')
+        with open('Temp.txt', 'r+b') as file:
+            s3.download_fileobj(Bucket=bucket, Key=key, file)
+            base64_image = file.read().decode('utf-8')
         print("downloaded")
         return base64_image
     except ClientError as e:
