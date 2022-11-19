@@ -19,7 +19,7 @@ my_aws_config = Config(
 
 log_client = boto3.client('logs', region_name="us-east-1")
 ec2_client = boto3.client('ec2', config=my_aws_config)
-backend = 'http://localhost:5002'
+backend = 'http://0.0.0.1:5002'
 
 
 def get_stats_logs():
