@@ -49,40 +49,40 @@ memcache_stat['hit_rate'] = 0
 memcache_config['max_capacity'] = 10
 memcache_config['replacement_policy'] = 'Least Recently Used'
 
-event = threading.Event()
-lock = threading.Lock()
-def background_job(db_config):
-    print("Background Job Start")
+# event = threading.Event()
+# lock = threading.Lock()
+# def background_job(db_config):
+#     print("Background Job Start")
 
-    while True:
-        event.wait(5)
-        # Get the statistics from memcache_stat
-        size_count = memcache_stat['size_count']
-        key_count = memcache_stat['key_count']
-        request_count = memcache_stat['request_count']
-        miss_count = memcache_stat['miss_count']
-        hit_count = memcache_stat['hit_count']
-        # Connect to the database
-        cnx = mysql.connector.connect(
-            user=db_config['user'], 
-            password=db_config['password'], 
-            host=db_config['host'], 
-            database=db_config['database'])            
-        # Execute the query
-        query = '''INSERT INTO cache_stats (cache_size, key_count, request_count, hit_count, miss_count) VALUES (%s, %s, %s, %s, %s)'''
-        cnx.autocommit = False
-        cursor = cnx.cursor(buffered=True)
-        with lock:
-            if threading.active_count() > 1:
-                print("Memcache Replacement Policy: ", memcache_config['replacement_policy'])
-                cursor.execute(query, (size_count, key_count, request_count, hit_count, miss_count))
-                cnx.commit()
-                print("------Memcache statistics store success------")
-        cnx.close()
-    print("Exit Background Job")
-    return "success" 
+#     while True:
+#         event.wait(5)
+#         # Get the statistics from memcache_stat
+#         size_count = memcache_stat['size_count']
+#         key_count = memcache_stat['key_count']
+#         request_count = memcache_stat['request_count']
+#         miss_count = memcache_stat['miss_count']
+#         hit_count = memcache_stat['hit_count']
+#         # Connect to the database
+#         cnx = mysql.connector.connect(
+#             user=db_config['user'], 
+#             password=db_config['password'], 
+#             host=db_config['host'], 
+#             database=db_config['database'])            
+#         # Execute the query
+#         query = '''INSERT INTO cache_stats (cache_size, key_count, request_count, hit_count, miss_count) VALUES (%s, %s, %s, %s, %s)'''
+#         cnx.autocommit = False
+#         cursor = cnx.cursor(buffered=True)
+#         with lock:
+#             if threading.active_count() > 1:
+#                 print("Memcache Replacement Policy: ", memcache_config['replacement_policy'])
+#                 cursor.execute(query, (size_count, key_count, request_count, hit_count, miss_count))
+#                 cnx.commit()
+#                 print("------Memcache statistics store success------")
+#         cnx.close()
+#     print("Exit Background Job")
+#     return "success" 
 
-print("main thread native_id:", threading.get_native_id())
-threading.Thread(target=background_job, args= (db_config,)).start()
+# print("main thread native_id:", threading.get_native_id())
+# threading.Thread(target=background_job, args= (db_config,)).start()
 
 from memcache import main

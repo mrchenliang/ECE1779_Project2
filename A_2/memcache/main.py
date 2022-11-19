@@ -43,3 +43,21 @@ def invalidate_key():
     key = request_json['key']
     flag = invalidate_specific_key(key)
     return response_builder(flag)
+
+
+@webapp.route('/getStatistics', methods=['GET', 'POST'])
+def getStatistics():
+    statistics = {
+        'key_count': memcache_stat['key_count'],
+        'size_count': memcache_stat['size_count'],
+        'request_count': memcache_stat['request_count'],
+        'miss_rate': memcache_stat['miss_rate'],
+        'hit_rate': memcache_stat['hit_rate']
+    }
+    response = webapp.response_class(
+        response=json.dumps(statistics),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
+
