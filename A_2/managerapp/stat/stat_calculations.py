@@ -3,7 +3,7 @@ from datetime import datetime
 from numpy import NaN
 from frontend.constants import aws_config
 
-client = boto3.client('logs', region_name="us-east-1", aws_access_key_id=aws_config['aws_access_key_id'], aws_secret_access_key=aws_config['aws_secret_access_key'])
+client = boto3.client('logs', region_name="us-east-1")
 
 def get_stat_logs():
     HALF_HOUR = 30*60
