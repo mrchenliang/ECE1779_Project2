@@ -22,7 +22,6 @@ def get_memcache():
     else:
         return file
 
-
 @webapp.route('/clear_cache', methods=['GET', 'POST'])
 # clears the memcache object
 def clear_cache():
