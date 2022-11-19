@@ -6,7 +6,7 @@ import requests, json
 api_routes = Blueprint('api_routes', __name__)
 
 # Backend Host Port
-backend_host = 'http://localhost:5002'
+backend_host = 'http://0.0.0.0:5002'
 
 @api_routes.route('/api/list_keys', methods=['POST'])
 # api end point to get a list of keys

@@ -16,7 +16,7 @@ config = Config(
 # s3 = boto3.client('s3',config=config, aws_access_key_id= aws_config['aws_access_key_id'], aws_secret_access_key= aws_config['aws_secret_access_key'])
 s3 = boto3.client('s3',config=config)
 
-backend_host = "http://localhost:5002"
+backend_host = "http://0.0.0.0:5002"
 ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif'}
 
 def download_image(location):

@@ -6,7 +6,7 @@ import requests, json
 image_routes = Blueprint('image_routes', __name__)
 
 # Backend Host Port
-backend_host = 'http://localhost:5002'
+backend_host = 'http://0.0.0.0:5002'
 
 @image_routes.route('/upload_image', methods = ['GET','POST'])
 # returns the upload page

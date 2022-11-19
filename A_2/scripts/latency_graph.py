@@ -60,7 +60,7 @@ import matplotlib.pyplot as plt
 
 
 def send_read_req(count):
-    url = "http://localhost:5000/api/key/cold"
+    url = "http://0.0.0.0:5000/api/key/cold"
     res = requests.request("POST", url, headers={}, data={})
     # print("Thread-" + str(count) + " " + str(res.status_code))
     print(res.text)

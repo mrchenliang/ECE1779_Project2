@@ -7,7 +7,7 @@ from managerapp.database_helper import get_db
 memcache_routes = Blueprint("memcache_routes", __name__)
 
 # Backend Host Port
-backend_host = 'http://localhost:5002'
+backend_host = 'http://0.0.0.0:5002'
 
 @memcache_routes.route('/memcache_manager', methods=['GET'])
 def memcache_manager():
