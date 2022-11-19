@@ -36,7 +36,7 @@ def get_stat_logs():
         
         data_array = [
             list(sample_data.index.values.astype(datetime)),
-            list(sample_data['size'].values),
+            list(sample_data['size_count'].values),
             list(sample_data['miss_rate'].values),
             list(sample_data['hit_rate'].values),
             list(sample_data['key_count'].values),
