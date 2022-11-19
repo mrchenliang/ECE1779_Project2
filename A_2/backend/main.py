@@ -135,7 +135,7 @@ def main():
     return get_response(True)
 
 
-@webapp.route('/readyReq', methods=['GET', 'POST'])
+@webapp.route('/ready_request', methods=['GET', 'POST'])
 def ready_request():
     global memcache_pool
     req_json = request.get_json(force=True)
@@ -150,7 +150,7 @@ def ready_request():
     return get_cache_response()
 
 
-@webapp.route('/startInstance', methods=['GET', 'POST'])
+@webapp.route('/start_instance', methods=['GET', 'POST'])
 def start_instance():
     instance_id = get_next_node()
     if not instance_id == None:
@@ -167,7 +167,7 @@ def start_instance():
     return get_response(True)
 
 
-@webapp.route('/stopInstance', methods=['GET', 'POST'])
+@webapp.route('/stop_instance', methods=['GET', 'POST'])
 def stop_instance():
     global memcache_pool
     instance_id = get_active_node()
@@ -204,7 +204,7 @@ def get_cache_info():
     )
 
 
-@webapp.route('/refreshConfiguration', methods = ['GET', 'POST'])
+@webapp.route('/refresh_configuration', methods = ['GET', 'POST'])
 def refresh_configuration():
     global memcache_pool
     cache_properties = request.get_json(force=True)
@@ -215,7 +215,7 @@ def refresh_configuration():
             ipv4 = memcache_pool[host]
             if not ipv4 == None and not ipv4 in stat: 
                 # If an address is starting up, it will be set once it is ready
-                address = 'http://' + str(ipv4) + ':5000/refreshConfiguration'
+                address = 'http://' + str(ipv4) + ':5000/refresh_configuration'
                 res = requests.post(address, json=cache_properties)
 
     return webapp.response_class(
@@ -225,7 +225,7 @@ def refresh_configuration():
     )
 
 
-@webapp.route('/setMemcachePoolConfig', methods = ['GET', 'POST'])
+@webapp.route('/set_memcache_pool_config', methods = ['GET', 'POST'])
 def set_memcache_pool_config():
     global pool_params
     pool_params = request.get_json(force = True)
@@ -236,7 +236,7 @@ def set_memcache_pool_config():
     )
 
 
-@webapp.route('/getMemcachePoolConfig', methods = ['GET', 'POST'])
+@webapp.route('/get_memcache_pool_config', methods = ['GET', 'POST'])
 def get_memcache_pool_config():
     global pool_params
     
@@ -264,7 +264,7 @@ def clear_memcache_pool_content():
     )
 
 
-@webapp.route('/clearData', methods = ['GET', 'POST'])
+@webapp.route('/clear_data', methods = ['GET', 'POST'])
 def clear_data():
     cnx = get_db()
     cursor = cnx.cursor(buffered = True)
@@ -280,8 +280,8 @@ def clear_data():
     )
 
 
-@webapp.route('/hashKeyRoute', methods = ['GET', 'POST'])
-def hash_key_route():
+@webapp.route('/hash_key', methods = ['GET', 'POST'])
+def hash_key():
     json_obj = request.get_json(force=True)
     key = json_obj['key']
     hash_val = hashlib.md5(key.encode()).hexdigest()
