@@ -98,6 +98,30 @@ def update_memcachepool_status():
     :param: None
     :return: Int
     """
+    print("Checking the memcache pool status")
+    instances = list(memcache_pool.keys())
+    # First using the Dry run to see whether we have the required permissions to get the status of the instance
+    try:
+        ec2.describe_instances(InstanceIds=instances, DryRun=True)
+    except ClientError as e:
+        if 'DryRunOperation' not in str(e):
+            raise
+    # Dry run succeeded, run describe_instances without dryrun
+    running_node_count = 0
+    try:
+        for instance in instances:
+            response = ec2.describe_instances(InstanceIds=[instance], DryRun=False)
+            inst_name = response['Reservations'][0]['Instances'][0]['State']['Name']
+            
+            if (inst_name == 'running'):
+                ip_address = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
+                memcache_pool[instance] = ip_address
+                running_node_count += 1
+            else:
+                memcache_pool[instance] = None
+        return running_node_count
+    except ClientError as e:
+        print(e)
 
 
 
