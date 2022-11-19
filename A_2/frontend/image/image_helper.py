@@ -1,7 +1,7 @@
 import base64, os, requests, boto3, tempfile, json
 from botocore.config import Config
 from frontend.constants import IMAGE_FOLDER, aws_config
-from frontend.image import s3_storage_helper
+# from frontend.image import s3_storage_helper
 from frontend.database_helper import get_db
 
 
