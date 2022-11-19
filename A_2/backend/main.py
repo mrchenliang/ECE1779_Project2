@@ -283,7 +283,7 @@ def clear_data():
 @webapp.route('/hash_key', methods = ['GET', 'POST'])
 def hash_key():
     json_obj = request.get_json(force=True)
-    key = json_obj['keyReq']
+    key = json_obj['key']
     hash_val = hashlib.md5(key.encode()).hexdigest()
     hash_val = int(hash_val, base=16)
     index = (hash_val % 16)+1

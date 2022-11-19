@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from frontend.database_helper import get_db
 from frontend.image.image_helper import download_image, save_image
-import requests
+import requests, json
 
 api_routes = Blueprint('api_routes', __name__)
 
