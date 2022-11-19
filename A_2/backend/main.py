@@ -213,7 +213,7 @@ def refresh_configuration():
     if resp == True:
         for host in memcache_pool:
             ipv4 = memcache_pool[host]
-            if not ipv4 == None and not ipv4 in STATES: 
+            if not ipv4 == None and not ipv4 in stat: 
                 # If an address is starting up, it will be set once it is ready
                 address = 'http://' + str(ipv4) + ':5000/refreshConfiguration'
                 res = requests.post(address, json=cache_params)
