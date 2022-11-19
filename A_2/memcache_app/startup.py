@@ -2,7 +2,7 @@ import requests, os
 import boto3
 from botocore.exceptions import ClientError
 
-instance_id_main = "i-0d6cb94ff6e44bdfc" # Main host
+instance_id_main = "i-0ca59c2326be01a9b" # Main host
 
 ec2 = boto3.client('ec2', region_name='us-east-1')
 
