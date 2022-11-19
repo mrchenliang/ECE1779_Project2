@@ -1,23 +1,13 @@
-import  mysql.connector, requests, json, boto3, time
+import requests, json, boto3, time
 import pandas as pd
 from botocore.exceptions import ClientError
 from botocore.config import Config
+from database_helper import *
 
 memcache_node = ["i-0ca59c2326be01a9b","i-034ee52984dc9bd2e","i-0972b8c8d8d577ec0","i-07a760bbdad228a87","i-067ee0ffdf31ca474","i-033d4ce97a7e3f234","i-0a7a70f7ed4da4cbc","i-0f2bcbfa2224b03df"]
 
 resp = requests.get("http://169.254.169.254/latest/user-data")
 config = json.loads(resp.content.decode('utf-8'))
-
-# aws_config = {
-#   'aws_access_key_id': config['aws_access_key_id'],
-#   'awss_secret_access_key': config['aws_secret_access_key']
-# }
-
-db_config = {'user': config["MySQL_user"],
-             'password': config["MySQL_password"],
-             'host': config["MySQL_host"],
-             'port': '3306',
-             'database': 'briandatabase'}
 
 my_aws_config = Config(
     region_name = 'us-east-1',
@@ -30,14 +20,6 @@ my_aws_config = Config(
 log_client = boto3.client('logs', region_name="us-east-1")
 ec2_client = boto3.client('ec2', config=my_aws_config)
 backend = 'http://localhost:5002'
-
-
-def connect_to_database():
-    return mysql.connector.connect(user=db_config['user'],
-                                   password=db_config['password'],
-                                   host=db_config['host'],
-                                   port=db_config['port'],
-                                   database=db_config['database']) 
 
 
 def get_stats_logs():
@@ -95,7 +77,7 @@ def get_pool_ready_count():
 
 
 def get_memcache_policy():
-    cnx = connect_to_database()
+    cnx = get_db()
     cursor = cnx.cursor(buffered = True)
     query = '''SELECT * FROM cache_policies WHERE id = (SELECT MAX(id) FROM cache_policies LIMIT 1)'''
     cursor.execute(query)
