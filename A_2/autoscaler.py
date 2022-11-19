@@ -111,7 +111,7 @@ def auto_scaler():
     global backend
 
     while (True):
-        resp = requests.get(backend + "/getMemcachePoolConfig")
+        resp = requests.get(backend + "/get_memcache_pool_config")
         pool_params = json.loads(resp.content.decode('utf-8'))
         print(pool_params)
         if pool_params['mode'] == 'automatic':
@@ -140,7 +140,7 @@ def auto_scaler():
                             
                             for i in range(max_startup):
                                 print("Call startup node")
-                                requests.post(backend + '/startInstance')
+                                requests.post(backend + '/start_instance')
 
                         # Get current memcache count, then scale up max 8
                         elif miss_rate < cache_policy[2]:
@@ -154,7 +154,7 @@ def auto_scaler():
                             
                             for i in range(max_shutdown):
                                 print("Call shutdown node")
-                                requests.post(backend + '/stopInstance')
+                                requests.post(backend + '/stop_instance')
         time.sleep(60)
 
 auto_scaler()

@@ -112,7 +112,7 @@ def set_pool_config():
             pool_params = {
                 'mode': 'manual',
             }
-            requests.post(backend_host + "/set_cache_pool_config", json=pool_params)
+            requests.post(backend_host + "/set_memcache_pool_config", json=pool_params)
             max_capacity, replacement_policy, created_at, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
 
             return render_template('manager.html',
@@ -145,7 +145,7 @@ def set_pool_config():
                     pool_params = {
                         'mode': 'automatic',
                     }
-                    requests.post(backend_host + "/set_cache_pool_config", json=pool_params)
+                    requests.post(backend_host + "/set_memcache_pool_config", json=pool_params)
                 
                     cache_policy = [0, max_miss_rate, min_miss_rate, expansion_ratio, shrink_ratio]
                     max_capacity, replacement_policy, created_at, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings(cache_policy)
