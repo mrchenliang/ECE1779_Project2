@@ -56,7 +56,7 @@ def get_memcache_properties():
             cache_dict = {
                 'created_at': cache_params[3],
                 'max_capacity': cache_params[1],
-                'replacement_method': cache_params[2]
+                'replacement_policy': cache_params[2]
             }
             return cache_dict
         return None
@@ -111,8 +111,8 @@ def set_cache_properties(cache_properties):
     try:
         cnx = get_db()
         cursor = cnx.cursor(buffered = True)
-        query_add = ''' INSERT INTO cache_properties (created_at, max_capacity, replacement_method) VALUES (%s,%s,%s)'''
-        cursor.execute(query_add,(cache_properties['created_at'], cache_properties['max_capacity'], cache_properties['replacement_method']))
+        query_add = ''' INSERT INTO cache_properties (created_at, max_capacity, replacement_policy) VALUES (%s,%s,%s)'''
+        cursor.execute(query_add,(cache_properties['created_at'], cache_properties['max_capacity'], cache_properties['replacement_policy']))
         cnx.commit()
         return True
     except:
@@ -299,7 +299,7 @@ def hash_key_route():
 cache_properties = {
     'created_at': time.time(),
     'max_capacity': 10,
-    'replacement_method': 'Least Recently Used'
+    'replacement_policy': 'Least Recently Used'
 }
 
 
