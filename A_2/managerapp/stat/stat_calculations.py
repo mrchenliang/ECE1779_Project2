@@ -41,7 +41,7 @@ def get_stat_logs():
             list(sample_data['hit_rate'].values),
             list(sample_data['key_count'].values),
             list(sample_data['request_count'].values),
-            # list(sample_data['active_count'].values)
+            list(sample_data['active_count'].values)
         ]
 
         return data_array
