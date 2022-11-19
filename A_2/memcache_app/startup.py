@@ -2,12 +2,9 @@ import requests, os
 import boto3
 from botocore.exceptions import ClientError
 
-instance_id_main = "i-043dc18a3aff50fe6" # Main host
-access_key = os.getenv("AWS_ACCESS_KEY")
-secret_key = os.getenv("AWS_SECRET_KEY")
+instance_id_main = "i-0d6cb94ff6e44bdfc" # Main host
 
-ec2 = boto3.client('ec2', region_name='us-east-1', aws_access_key_id=access_key,
-         aws_secret_access_key=secret_key)
+ec2 = boto3.client('ec2', region_name='us-east-1')
 
 def call_ready_request():
     try:
@@ -17,6 +14,7 @@ def call_ready_request():
             raise
 
     try:
+        print("################################################################")
         response = ec2.describe_instances(InstanceIds=[instance_id_main], DryRun=False)
 
         resp = requests.get("http://169.254.169.254/latest/meta-data/public-ipv4")
