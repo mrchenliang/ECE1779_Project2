@@ -61,7 +61,6 @@ def replacement():
     elif memcache_config['replacement_policy'] == 'Least Recently Used':
         return lru_replacement()
 
-
 def update_memcache_stat_of_statistics(existed):
     """
     Using this function to update the statistics of memcache after GET operation
