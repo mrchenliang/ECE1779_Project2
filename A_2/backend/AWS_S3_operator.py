@@ -64,7 +64,7 @@ def download_file(key,bucket='briansbucket',s3=None):
         print("s3 client created")
     try:
         with open('Temp.txt', 'r+b') as file:
-            s3.download_fileobj(Bucket=bucket, Key=key, file)
+            s3.download_fileobj(bucket, key, file)
             base64_image = file.read().decode('utf-8')
         print("downloaded")
         return base64_image
