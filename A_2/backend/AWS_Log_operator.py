@@ -70,6 +70,8 @@ def get_aggregate_statistics():
             try:
                 address = 'http://' + str(ipv4) + ':5000/get_statistics'
                 response = requests.get(address)
+                print("################################################################")
+                print(response.content.decode('utf-8'))
                 response_dict = json.loads(response.content.decode('utf-8'))
                 statistics['key_count'] += response_dict['key_count']
                 statistics['size_count'] += response_dict['size_count']
