@@ -11,6 +11,7 @@ db_config = {'user': config["MySQL_user"],
              'password': config["MySQL_password"],
              'host': config["MySQL_host"],
              'port': '3306',
+             'database': 'memcache'
             }
 
 
