@@ -10,7 +10,6 @@ from datetime import datetime
 from sys import getsizeof
 
 from memcache import webapp, memcache, memcache_stat, memcache_config
-from frontend.cache_helper import get_cache
 from frontend.database_helper import get_db
 
 
@@ -191,3 +190,17 @@ def refresh_config_of_memcache():
         print("------Get configuration failed------")
         return False
 
+
+def get_cache():
+    # get the cache properties from the database cache_properties
+    try:
+        cnx = get_db()
+        cursor = cnx.cursor(buffered = True)
+        query = '''SELECT * FROM cache_properties WHERE id = (SELECT MAX(id) FROM cache_properties LIMIT 1)'''
+        cursor.execute(query)
+        if(cursor._rowcount):
+            cache=cursor.fetchone()
+            return cache
+        return None
+    except:
+        return None
