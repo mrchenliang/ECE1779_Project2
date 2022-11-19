@@ -1,7 +1,7 @@
 import boto3, time, json, pandas as pd
 from datetime import datetime
 from numpy import NaN
-from frontend.constants import aws_config
+# from frontend.constants import aws_config
 
 client = boto3.client('logs', region_name="us-east-1")
 
