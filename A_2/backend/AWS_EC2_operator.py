@@ -2,7 +2,7 @@ import sys, boto3, threading, time
 from botocore.exceptions import ClientError
 from botocore.config import Config
 from backend import memcache_pool
-from frontend.constants import aws_config
+# from frontend.constants import aws_config
 
 my_aws_config = Config(
     region_name = 'us-east-1',
