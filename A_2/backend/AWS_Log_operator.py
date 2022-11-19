@@ -69,6 +69,7 @@ def get_aggregate_statistics():
         if not ipv4 == None and not ipv4 in stat:
             try:
                 print("################################################################")
+                print(ipv4)
                 address = 'http://' + str(ipv4) + ':5000/get_statistics'
                 response = requests.get(address)
                 print(response.content.decode('utf-8'))
