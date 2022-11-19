@@ -68,7 +68,7 @@ def get_aggregate_statistics():
         ipv4 = memcache_pool[host]
         if not ipv4 == None and not ipv4 in stat:
             try:
-                address = 'http://' + str(ipv4) + ':5000/getStatistics'
+                address = 'http://' + str(ipv4) + ':5000/get_statistics'
                 response = requests.get(address)
                 response_dict = json.loads(response.content.decode('utf-8'))
                 statistics['key_count'] += response_dict['key_count']

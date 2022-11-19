@@ -44,8 +44,8 @@ def invalidate_key():
     return response_builder(flag)
 
 
-@webapp.route('/getStatistics', methods=['GET', 'POST'])
-def getStatistics():
+@webapp.route('/get_statistics', methods=['GET', 'POST'])
+def get_statistics():
     statistics = {
         'key_count': memcache_stat['key_count'],
         'size_count': memcache_stat['size_count'],
