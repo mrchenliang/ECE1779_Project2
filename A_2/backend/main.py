@@ -184,7 +184,7 @@ def stop_instance():
     return get_response(True)
 
 
-@webapp.route('/getCacheInfo', methods = ['GET', 'POST'])
+@webapp.route('/get_cache_info', methods = ['GET', 'POST'])
 def get_cache_info():
     """
     Using the function to get all cache information including parameters and active instances to the frontend
