@@ -31,9 +31,9 @@ def get_response(input=False):
 
 
 def get_cache_response():
-    cache_params = get_memcache_properties()
+    cache_properties = get_memcache_properties()
     response = webapp.response_class(
-        response=json.dumps(cache_params),
+        response=json.dumps(cache_properties),
         status=200,
         mimetype='application/json'
     )
@@ -44,7 +44,7 @@ def get_cache_response():
 def get_memcache_properties():
     """ Get the most recent cache configuration parameters
     from the database
-    Return: cache_params row
+    Return: cache_properties row
     """
     try:
         cnx = get_db()
@@ -52,11 +52,11 @@ def get_memcache_properties():
         query = '''SELECT * FROM cache_properties WHERE id = (SELECT MAX(id) FROM cache_properties LIMIT 1)'''
         cursor.execute(query)
         if(cursor._rowcount):# if key exists in db
-            cache_params=cursor.fetchone()
+            cache_properties=cursor.fetchone()
             cache_dict = {
-                'created_at': cache_params[3],
-                'max_capacity': cache_params[1],
-                'replacement_policy': cache_params[2]
+                'created_at': cache_properties[3],
+                'max_capacity': cache_properties[1],
+                'replacement_policy': cache_properties[2]
             }
             return cache_dict
         return None
@@ -190,10 +190,10 @@ def get_cache_info():
     Using the function to get all cache information including parameters and active instances to the frontend
     """
     global memcache_pool, pool_params
-    cache_params = get_memcache_properties()
+    cache_properties = get_memcache_properties()
     data = {
         'memcache_pool': memcache_pool,
-        'cache_params': cache_params,
+        'cache_properties': cache_properties,
         'pool_params': pool_params 
     }
 
@@ -207,16 +207,16 @@ def get_cache_info():
 @webapp.route('/refreshConfiguration', methods = ['GET', 'POST'])
 def refresh_configuration():
     global memcache_pool
-    cache_params = request.get_json(force=True)
+    cache_properties = request.get_json(force=True)
     # Save to DB
-    resp = set_cache_properties(cache_params)
+    resp = set_cache_properties(cache_properties)
     if resp == True:
         for host in memcache_pool:
             ipv4 = memcache_pool[host]
             if not ipv4 == None and not ipv4 in stat: 
                 # If an address is starting up, it will be set once it is ready
                 address = 'http://' + str(ipv4) + ':5000/refreshConfiguration'
-                res = requests.post(address, json=cache_params)
+                res = requests.post(address, json=cache_properties)
 
     return webapp.response_class(
             response = json.dumps("OK"),

@@ -23,7 +23,7 @@ def memcache_manager():
         cache_policy=cache_policy)
 
 @memcache_routes.route('/set_cache', methods = ['GET', 'POST'])
-def memcache_params():
+def memcache_properties():
     global backend_host
     if request.method == 'POST':
         new_cap = request.form.get('capacity')
@@ -185,9 +185,9 @@ def format_cache_settings(cache_policy=None):
     global backend_host
     res = requests.get(backend_host + '/get_cache_info')
     memcache_pool = res.json()['memcache_pool']
-    max_capacity = res.json()['cache_params']['max_capacity']
-    replacement_policy = res.json()['cache_params']['replacement_policy']
-    created_at = time.ctime(res.json()['cache_params']['created_at'])
+    max_capacity = res.json()['cache_properties']['max_capacity']
+    replacement_policy = res.json()['cache_properties']['replacement_policy']
+    created_at = time.ctime(res.json()['cache_properties']['created_at'])
     pool_params = res.json()['pool_params']
 
     i = 1
