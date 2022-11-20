@@ -49,7 +49,7 @@ def key(key_value):
         dictionary = json.loads(response.content.decode('utf-8'))
         ip=dictionary[1]
         # get the image by key from the memcache
-        res = requests.post('http://' + str(ip) + '5000/get_from_memcache', json=request_json)
+        res = requests.post('http://' + str(ip) + ':5000/get_from_memcache', json=request_json)
         # if the image is not by the key in the memcache
         if res.text == 'Key Not Found' or res == None:
             # queries the database images by specific key

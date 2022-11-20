@@ -169,11 +169,13 @@ class RRMemCache(RRCache):
         return response
 
     def __setitem__(self, key, value):
-        size_of_value = self.size_base_64(value)
-        if(self.current_size + size_of_value >= self.maximum_size):
-            while(self.current_size + size_of_value >= self.maximum_size and self.currsize > 0):
+        size_of_value = float(self.size_base_64(value))
+        maximum_size = float(self.maximum_size)
+        current_size = float(self.current_size)
+        if(current_size + size_of_value >= maximum_size):
+            while(current_size + size_of_value >= maximum_size and float(self.currsize) > 0):
                 self.popitem()
-        if(key != None and value != None and (self.current_size + size_of_value) <= self.maximum_size):
+        if(key != None and value != None and (current_size + size_of_value) <= maximum_size):
             super().__setitem__(key, value)
             self.current_size +=  size_of_value
             return True

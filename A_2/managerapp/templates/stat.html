@@ -2,9 +2,27 @@
 <head>
   <title>Very simple memcache</title>
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='main.css') }}" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.1.0/echarts-en.common.min.js"></script>
 </head> 
 <html>
   <body>
+
+    {% include "navbar.html" %}
+    <h2>Memcache Manager Stats</h2>
+    <div id="wrapper" style="margin-top: 20px">
+      <div class="form-row" style="justify-content:center">
+        <!-- <div id="active_count_chart" style="width: 600px;height:500px;"></div> -->
+        <div id="request_count_chart" style="width: 600px;height:500px;"></div>
+        </div>
+      <div class="form-row" style="justify-content:center">
+        <div id="hit_rate_chart" style="width: 600px;height:500px;"></div>
+        <div id="miss_rate_chart" style="width: 600px;height:500px;"></div>
+      </div>
+      <div class="form-row" style="justify-content:center">
+        <div id="size_count_chart" style="width: 600px;height:500px;"></div>
+        <div id="key_count_chart" style="width: 600px;height:500px;"></div>
+      </div>
+    </div>
     <script type="text/javascript">
       // Initialize the echarts instance based on the prepared dom
       var size_count_chart = echarts.init(document.getElementById('size_count_chart'));
@@ -14,21 +32,22 @@
       var request_count_chart = echarts.init(document.getElementById('request_count_chart'));
       // var active_count_chart = echarts.init(document.getElementById('active_count_chart'));
 
-      var stats_data = JSON.parse('{{ stats_data | tojson | safe}}')
+      var stat_data = JSON.parse('{{ stat_data | tojson | safe}}')
      
       // Configure Data
       var options = { month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric' };
-      var times = {{ stats_data }}[0]
+      var times = {{ stat_data }}[0]
       var dates = []
       for (const time of times) { 
           dates.push(new Date(time / 1000000).toLocaleString("en-US", options))
       }
-      var size_count = {{ stats_data }}[1]
-      var miss_rate = {{ stats_data }}[2]
-      var hit_rate = {{ stats_data }}[3]
-      var key_count = {{ stats_data }}[4]
-      var request_count = {{ stats_data }}[5]
-      // var active_count = {{ stats_data }}[6]
+      var size_count = {{ stat_data }}[1]
+      var miss_rate = {{ stat_data }}[2]
+      var hit_rate = {{ stat_data }}[3]
+      var key_count = {{ stat_data }}[4]
+      var request_count = {{ stat_data }}[5]
+      // var active_count = {{ stat_data }}[6]
+      console.log(request_count, key_count, hit_rate, miss_rate, size_count, dates)
 
       // Specify the configuration items and data for Size Count Chart
       var size_count_chart_options = {
@@ -55,7 +74,7 @@
         },
         series: [
           {
-            data: size,
+            data: size_count,
             type: 'line',
             areaStyle: {
               opacity: 0.8,
@@ -313,22 +332,5 @@
       request_count_chart.setOption(request_count_chart_options);
       // active_count_chart.setOption(active_count_chart_options);
     </script>
-    {% include "navbar.html" %}
-    <h2>Memcache Manager Stats</h2>
-    <div id="wrapper" style="margin-top: 20px">
-      <div class="form-row" style="justify-content:center">
-        <!-- <div id="active_count_chart" style="width: 600px;height:500px;"></div> -->
-        <div id="request_count_chart" style="width: 600px;height:500px;"></div>
-        </div>
-      <div class="form-row" style="justify-content:center">
-        <div id="hit_rate_chart" style="width: 600px;height:500px;"></div>
-        <div id="miss_rate_chart" style="width: 600px;height:500px;"></div>
-      </div>
-      <div class="form-row" style="justify-content:center">
-        <div id="size_count_chart" style="width: 600px;height:500px;"></div>
-        <div id="key_count_chart" style="width: 600px;height:500px;"></div>
-      </div>
-    </div>
-    
   </body>
 </html>

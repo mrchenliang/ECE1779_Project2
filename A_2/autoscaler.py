@@ -77,7 +77,7 @@ def get_pool_ready_count():
 
 
 def get_memcache_policy():
-    cnx = get_db()
+    cnx = connect_to_database()
     cursor = cnx.cursor(buffered = True)
     query = '''SELECT * FROM cache_policies WHERE id = (SELECT MAX(id) FROM cache_policies LIMIT 1)'''
     cursor.execute(query)
@@ -104,12 +104,14 @@ def auto_scaler():
             print("Unstable Count " + str(unstable_count))
 
             if unstable_count == 0:
-                miss_rate = get_stats_logs()
-                print("Current Miss Rate: " + str(miss_rate))
+                miss_rate = get_stats_logs() * 100
+                print("Current Miss Rate: " + str(miss_rate) + "%")
                 # Miss rate is none, when no logs have been printed for this time period
                 if not miss_rate == None:
                     cache_policy = get_memcache_policy()
+                    print("--------------------------------")
                     print(cache_policy)
+                    print("--------------------------------")
                     if not cache_policy == None:
                         if miss_rate > cache_policy[1]:
                             # Max Miss Rate, Scale up instances

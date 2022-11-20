@@ -250,8 +250,8 @@ def get_memcache_pool_config():
     )
 
 
-@webapp.route('/clearMemcachePoolContent', methods = ['GET', 'POST'])
-def clear_memcache_pool_content():
+@webapp.route('/clear_cache_pool', methods = ['GET', 'POST'])
+def clear_cache_pool():
     for host in memcache_pool:
         ipv4 = memcache_pool[host]
         if not ipv4 == None and not ipv4 in stat:
@@ -271,7 +271,7 @@ def clear_memcache_pool_content():
 def clear_data():
     cnx = get_db()
     cursor = cnx.cursor(buffered = True)
-    query_del = ''' DELETE * from images; '''
+    query_del = ''' DELETE from images; '''
     cursor.execute(query_del)
     cnx.commit()
 
