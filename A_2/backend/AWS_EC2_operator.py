@@ -73,7 +73,7 @@ def start_instance(instance_id):
         print("Start instance %s successfully" % instance_id)
         # Using to start the memcache service in a new EC2 instance
         resp = ec2.describe_instances(InstanceIds=[instance_id], DryRun=False)
-        inst_name = response['Reservations'][0]['Instances'][0]['State']['Name']
+        inst_name = resp['Reservations'][0]['Instances'][0]['State']['Name']
         while inst_name != "running":
             print("+++++++++++++++++++++++++++++++++++++++++++")
             print("Not started yet")
