@@ -78,10 +78,11 @@ def start_instance(instance_id):
         print(response)
         print("Start instance %s successfully" % instance_id)
         # Using to start the memcache service in a new EC2 instance
+        time.sleep(10)
         ssm_client = boto3.client('ssm')
         command = ['python3 ECE1779_Project2/A_2/run_memcache.py']
         instance_id_to_start_memcache = [instance_id]
-        resp = execute_linux_command_in_EC2()
+        resp = execute_linux_command_in_EC2(ssm_client, command, instance_id_to_start_memcache)
         print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         print("The linux command execution status is: %s" % resp)
         print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
