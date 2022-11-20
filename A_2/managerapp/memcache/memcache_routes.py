@@ -184,7 +184,7 @@ def set_pool_config():
 def format_cache_settings(cache_policy=None):
     global backend_host
     res = requests.get(backend_host + '/get_cache_info')
-    print(res)
+    print(res.json())
     memcache_pool = res.json()['memcache_pool']
     max_capacity = res.json()['cache_properties']['max_capacity']
     replacement_policy = res.json()['cache_properties']['replacement_policy']
