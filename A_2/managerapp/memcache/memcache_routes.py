@@ -26,7 +26,7 @@ def memcache_properties():
     global backend_host
     if request.method == 'POST':
         new_capacity = request.form.get('max_capacity')
-        if new_capacity.isdigit() and int(new_capacity) <= 500:
+        if new_capacity.isdigit() and int(new_capacity) <= 2000:
             new_policy = request.form.get('replacement_policy')
             new_time = time.time()
             req = {
