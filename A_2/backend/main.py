@@ -193,6 +193,7 @@ def get_cache_info():
     global memcache_pool, pool_params
     cache_properties = get_memcache_properties()
     AWS_EC2_operator.update_memcache_pool_status()
+    print(cache_properties, pool_params, memcache_pool)
     data = {
         'memcache_pool': memcache_pool,
         'cache_properties': cache_properties,
