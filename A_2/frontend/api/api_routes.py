@@ -62,6 +62,15 @@ def key(key_value):
                 cnx.close()
                 # convert the image to Base64
                 image = download_image(key_value)
+                if image == 'Image Not Found in S3':
+                    response = {
+                        'success': 'false', 
+                        'error': {
+                            'code': '406 Not Acceptable', 
+                            'message': 'The associated image with key does not exist'
+                            }
+                        }
+                    return jsonify(response)
                 request_json = { 
                     key_value: image 
                 }

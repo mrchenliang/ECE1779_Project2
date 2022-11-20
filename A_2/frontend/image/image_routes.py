@@ -49,6 +49,8 @@ def image():
                 cnx.close()
                 # download image
                 image = download_image(key_value)
+                if image == 'Image Not Found in S3':
+                    return render_template('image.html', exists=False, image='does not exist')
                 request_json = { 
                     key_value: image 
                 }
