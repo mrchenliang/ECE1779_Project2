@@ -116,8 +116,8 @@ def set_cache_properties(cache_properties):
     try:
         cnx = get_db()
         cursor = cnx.cursor(buffered = True)
-        query_add = ''' INSERT INTO cache_properties (created_at, max_capacity, replacement_policy) VALUES (%s,%s,%s)'''
-        cursor.execute(query_add,(cache_properties['created_at'], cache_properties['max_capacity'], cache_properties['replacement_policy']))
+        query_add = '''INSERT INTO cache_properties (max_capacity, replacement_policy) VALUES (%s,%s)'''
+        cursor.execute(query_add,(cache_properties['max_capacity'], cache_properties['replacement_policy']))
         cnx.commit()
         return True
     except:
