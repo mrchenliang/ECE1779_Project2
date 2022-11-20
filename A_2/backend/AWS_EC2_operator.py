@@ -93,7 +93,7 @@ def shutdown_instance(instance_id):
         print(e)
 
 
-def update_memcachepool_status():
+def update_memcache_pool_status():
     """
     Using the function to update the memcache instance node status in the memcache pool
     :param: None
@@ -113,12 +113,15 @@ def update_memcachepool_status():
         for instance in instances:
             response = ec2.describe_instances(InstanceIds=[instance], DryRun=False)
             inst_name = response['Reservations'][0]['Instances'][0]['State']['Name']
-            print("--------------------------------instance state name: %s---------------------" % inst_name)
             
             if (inst_name == 'running'):
                 ip_address = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
                 memcache_pool[instance] = ip_address
                 running_node_count += 1
+            elif inst_name == 'shutting-down' or inst_name == 'stopping':
+                memcache_pool[instance] = 'Stopping'
+            elif  inst_name == 'pending':
+                memcache_pool[instance] = 'Starting'
             else:
                 memcache_pool[instance] = None
         return running_node_count

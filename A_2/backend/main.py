@@ -192,12 +192,12 @@ def get_cache_info():
     """
     global memcache_pool, pool_params
     cache_properties = get_memcache_properties()
+    AWS_EC2_operator.update_memcache_pool_status()
     data = {
         'memcache_pool': memcache_pool,
         'cache_properties': cache_properties,
         'pool_params': pool_params 
     }
-
     return webapp.response_class(
         response=json.dumps(data),
         status=200,
@@ -305,6 +305,6 @@ cache_properties = {
 
 
 set_cache_properties(cache_properties)
-startup_count = AWS_EC2_operator.update_memcachepool_status()
+startup_count = AWS_EC2_operator.update_memcache_pool_status()
 if startup_count == 0:
     start_instance()
