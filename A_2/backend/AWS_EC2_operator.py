@@ -13,7 +13,6 @@ my_aws_config = Config(
     }
 )
 
-# ec2 = boto3.client('ec2',config=my_aws_config,aws_access_key_id= aws_config['aws_access_key_id'], aws_secret_access_key= aws_config['aws_secret_access_key'])
 ec2 = boto3.client('ec2',config=my_aws_config)
 
 
@@ -46,13 +45,7 @@ def instance_status_check(instance_id):
             print(e)
     # set the status of the instance in the memcache_pool to None        
     memcache_pool[instance_id] = None
-
-
-def execute_command_to_start_memcache(ipv4):
-    print(os.system("ssh -tt -o 'StrictHostKeyChecking no' -i /home/ubuntu/Brianqjn.pem ubuntu@%s" % ipv4))
-    print(os.system("python3 ~/ECE1779_Project2/A_2/run_memcache.py"))
-    print(os.system("exit"))
-
+    
 
 def start_instance(instance_id):
     """

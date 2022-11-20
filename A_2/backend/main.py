@@ -4,14 +4,26 @@ from backend import AWS_EC2_operator
 from frontend.database_helper import get_db 
 from backend.AWS_S3_operator import clear_images
 from managerapp.constants import default_max_capacity, default_replacement_policy
-import json, time, requests, datetime
+import json, time, requests, datetime, os
 import hashlib
+import boto3
+from botocore.config import Config
 
 stat = ["Starting", "Stopping"]
 
 pool_params = {
     'mode': 'manual',
 }
+
+my_aws_config = Config(
+    region_name = 'us-east-1',
+    retries = {
+        'max_attempts': 10,
+        'mode': 'standard'
+    }
+)
+
+ec2 = boto3.client('ec2',config=my_aws_config)
 
 
 def get_response(input=False):
@@ -132,6 +144,12 @@ def total_active_node():
     return count, active_list
 
 
+def execute_command_to_start_memcache(ipv4):
+    print(os.system("ssh -tt -o 'StrictHostKeyChecking no' -i /home/ubuntu/Brianqjn.pem ubuntu@%s" % ipv4))
+    print(os.system("python3 ~/ECE1779_Project2/A_2/run_memcache.py"))
+    print(os.system("exit"))
+
+
 @webapp.route('/', methods=['GET', 'POST'])
 def main():
     return get_response(True)
@@ -165,7 +183,16 @@ def start_instance():
         except:
             print("Frontend not started yet")
         AWS_EC2_operator.start_instance(instance_id)
-
+        time.sleep(10)
+        response = ec2.describe_instances(InstanceIds=[instance_id], DryRun=False)
+        inst_name = response['Reservations'][0]['Instances'][0]['State']['Name']
+        while inst_name != 'running':
+            time.sleep(10)
+            print("Waiting for instance running...")
+            response = ec2.describe_instances(InstanceIds=[instance_id], DryRun=False)
+            inst_name = response['Reservations'][0]['Instances'][0]['State']['Name']
+        ip_address = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
+        execute_command_to_start_memcache(ip_address)
     return get_response(True)
 
 
