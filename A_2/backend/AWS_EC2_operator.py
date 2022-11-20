@@ -113,6 +113,7 @@ def update_memcachepool_status():
         for instance in instances:
             response = ec2.describe_instances(InstanceIds=[instance], DryRun=False)
             inst_name = response['Reservations'][0]['Instances'][0]['State']['Name']
+            print("--------------------------------instance state name: %s---------------------" % inst_name)
             
             if (inst_name == 'running'):
                 ip_address = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
