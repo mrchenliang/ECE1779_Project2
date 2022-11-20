@@ -12,9 +12,9 @@ are obtained by over-riding the methods of the super class.
 '''
 class LRUMemCache(LRUCache):
     def __init__(self, size):
-        super().__init__(maxsize = self.MB_to_Bytes(size), getsizeof= None)
+        super().__init__(maxsize = float(self.MB_to_Bytes(size)), getsizeof= None)
         self.replace_policy = constants.LRU
-        self.maximum_size = self.MB_to_Bytes(size)
+        self.maximum_size = float(self.MB_to_Bytes(size))
         self.current_size = 0
         self.hit = 0
         self.miss = 0
@@ -28,9 +28,9 @@ class LRUMemCache(LRUCache):
     def updateitem(self, key, new_value):
         if(self.__getitem__(key)):
             current_value = self._Cache__data[key]
-            self.current_size -= self.size_base_64(current_value)
+            self.current_size -= float(self.size_base_64(current_value))
             self._Cache__data[key] = new_value
-            self.current_size += self.size_base_64(new_value)
+            self.current_size += float(self.size_base_64(new_value))
             return True
         return False
 
@@ -39,7 +39,7 @@ class LRUMemCache(LRUCache):
             # if(response != None):
             response = super().popitem()
             (key, value) = response
-            self.current_size -= self.size_base_64(value)
+            self.current_size -= float(self.size_base_64(value))
             print("key popped in LRU is: ", key)
             return(key, value)
         return None
@@ -58,7 +58,7 @@ class LRUMemCache(LRUCache):
         if(response != None):
             (_, value) = response
             super().pop(key)
-            self.current_size -= self.size_base_64(value)
+            self.current_size -= float(self.size_base_64(value))
             return "OK"
         return None
     
@@ -105,9 +105,9 @@ are obtained by over-riding the methods of the super class.
 class RRMemCache(RRCache):
     def __init__(self, size):
  
-        super().__init__(maxsize = self.MB_to_Bytes(size), choice = random.choice, getsizeof= None)
+        super().__init__(maxsize = float(self.MB_to_Bytes(size)), choice = random.choice, getsizeof= None)
         self.replacement_policy = constants.RR
-        self.maximum_size = self.MB_to_Bytes(size)
+        self.maximum_size = float(self.MB_to_Bytes(size))
         self.current_size = 0
         self.hit = 0
         self.miss = 0
@@ -121,9 +121,9 @@ class RRMemCache(RRCache):
     def updateitem(self, key, new_value):
         if(self.__getitem__(key)):
             current_value = self._Cache__data[key]
-            self.current_size -= self.size_base_64(current_value)
+            self.current_size -= float(self.size_base_64(current_value))
             self._Cache__data[key] = new_value
-            self.current_size += self.size_base_64(new_value)
+            self.current_size += float(self.size_base_64(new_value))
             return True
         return False
 
@@ -132,7 +132,7 @@ class RRMemCache(RRCache):
             # if(response != None):
             response = super().popitem()
             (key, value) = response
-            self.current_size -= self.size_base_64(value)
+            self.current_size -= float(self.size_base_64(value))
             print("key popped is RR: ", key)
             return(key, value)
         return None
@@ -152,14 +152,14 @@ class RRMemCache(RRCache):
         if(response != None):
             (_, value) = response
             super().pop(key)
-            self.current_size -= self.size_base_64(value)
+            self.current_size -= float(self.size_base_64(value))
             return "OK"
         return None
     
     def clear_cache(self):
         print("entered clear cache")
         with lock:
-            while self.currsize > 0:
+            while float(self.currsize) > 0:
                 self.popitem()
             self.current_size=0
         
