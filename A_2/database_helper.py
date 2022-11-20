@@ -17,12 +17,4 @@ def connect_to_database():
                                    password=db_config['password'],
                                    host=db_config['host'],
                                    port=db_config['port'],
-                                   database=db_config['database'])
-
-def get_db():
-    # get the database
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = connect_to_database()
-    return db
-    
+                                   database=db_config['database'])    

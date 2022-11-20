@@ -104,8 +104,8 @@ def auto_scaler():
             print("Unstable Count " + str(unstable_count))
 
             if unstable_count == 0:
-                miss_rate = get_stats_logs()
-                print("Current Miss Rate: " + str(miss_rate))
+                miss_rate = get_stats_logs() * 100
+                print("Current Miss Rate: " + str(miss_rate) + "%")
                 # Miss rate is none, when no logs have been printed for this time period
                 if not miss_rate == None:
                     cache_policy = get_memcache_policy()
