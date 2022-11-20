@@ -183,16 +183,6 @@ def start_instance():
         except:
             print("Frontend not started yet")
         AWS_EC2_operator.start_instance(instance_id)
-        time.sleep(10)
-        response = ec2.describe_instances(InstanceIds=[instance_id], DryRun=False)
-        inst_name = response['Reservations'][0]['Instances'][0]['State']['Name']
-        while inst_name != 'running':
-            time.sleep(10)
-            print("Waiting for instance running...")
-            response = ec2.describe_instances(InstanceIds=[instance_id], DryRun=False)
-            inst_name = response['Reservations'][0]['Instances'][0]['State']['Name']
-        ip_address = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
-        execute_command_to_start_memcache(ip_address)
     return get_response(True)
 
 
