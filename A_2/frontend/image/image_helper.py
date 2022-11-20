@@ -19,9 +19,10 @@ s3 = boto3.client('s3',config=config)
 backend_host = "http://0.0.0.0:5002"
 ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif'}
 
-def download_image(location):
+def download_image(key):
+    print(key)
     with open('Temp.txt', 'wb') as file:
-        s3.download_fileobj('briansbucket', location, file)
+        s3.download_fileobj('briansbucket', key, file)
     with open('Temp.txt', 'rb') as file:
         base64_image = file.read().decode('utf-8')
     file.close()

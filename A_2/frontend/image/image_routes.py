@@ -49,7 +49,7 @@ def image():
                 location=str(cursor.fetchone()[0]) 
                 cnx.close()
                 # convert the image to Base64
-                image = download_image(location)
+                image = download_image(key_value)
                 request_json = { 
                     key_value: image 
                 }
