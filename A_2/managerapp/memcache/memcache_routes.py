@@ -28,14 +28,13 @@ def memcache_properties():
         new_capacity = request.form.get('max_capacity')
         if new_capacity.isdigit() and int(new_capacity) <= 2000:
             new_policy = request.form.get('replacement_policy')
-            new_time = time.time()
             req = {
                 'max_capacity': new_capacity, 
                 'replacement_policy': new_policy, 
-                'created_at': new_time
             }
             resp = requests.post(backend_host + '/refresh_configuration', json=req)
             max_capacity, replacement_policy, created_at, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
+            print(resp.json())
             if resp.json() == 'OK':
                 return render_template('manager.html',
                 max_capacity=max_capacity,
