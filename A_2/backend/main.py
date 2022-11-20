@@ -124,6 +124,7 @@ def total_active_node():
     count=0
     active_list=[]
     for id, ip in memcache_pool.items():
+        print("--------------------------------instance status: %s------------------------------" % ip)
         if not ip == None and not ip == 'Stopping' and not ip == "Starting":
             count+=1
             active_list.append((id,ip))
