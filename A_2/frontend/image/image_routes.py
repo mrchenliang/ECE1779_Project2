@@ -35,21 +35,17 @@ def image():
         }
         resp = requests.get(backend_host + '/hash_key', json=request_json)
         dictionary = json.loads(resp.content.decode('utf-8'))
-        print(dictionary)
         ip=dictionary[1]
-        print(ip)
         res = requests.post('http://'+ str(ip) + ':5000/get_from_memcache', json=request_json)
-        print(res.text)
         # if the image is not by the key in the memcache
         if res.text == 'Key Not Found' or res == None:
             # queries the database images by specific key
             cnx = get_db()
             cursor = cnx.cursor(buffered=True)
-            query = 'SELECT images.location FROM images where images.key = %s'
+            query = 'SELECT images.key FROM images where images.key = %s'
             cursor.execute(query, (key_value,))
             # if the image is found
             if cursor._rowcount:
-                location=str(cursor.fetchone()[0]) 
                 cnx.close()
                 # download image
                 image = download_image(key_value)

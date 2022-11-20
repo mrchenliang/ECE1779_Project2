@@ -55,11 +55,10 @@ def key(key_value):
             # queries the database images by specific key
             cnx = get_db()
             cursor = cnx.cursor(buffered=True)
-            query = 'SELECT images.location FROM images where images.key = %s'
+            query = 'SELECT images.key FROM images where images.key = %s'
             cursor.execute(query, (key_value,))
             # if the image is found
             if cursor._rowcount:
-                location=str(cursor.fetchone()[0]) 
                 cnx.close()
                 # convert the image to Base64
                 image = download_image(key_value)
