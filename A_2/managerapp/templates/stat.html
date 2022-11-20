@@ -14,21 +14,21 @@
       var request_count_chart = echarts.init(document.getElementById('request_count_chart'));
       // var active_count_chart = echarts.init(document.getElementById('active_count_chart'));
 
-      var stats_data = JSON.parse('{{ stats_data | tojson | safe}}')
+      var stat_data = JSON.parse('{{ stat_data | tojson | safe}}')
      
       // Configure Data
       var options = { month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric' };
-      var times = {{ stats_data }}[0]
+      var times = {{ stat_data }}[0]
       var dates = []
       for (const time of times) { 
           dates.push(new Date(time / 1000000).toLocaleString("en-US", options))
       }
-      var size_count = {{ stats_data }}[1]
-      var miss_rate = {{ stats_data }}[2]
-      var hit_rate = {{ stats_data }}[3]
-      var key_count = {{ stats_data }}[4]
-      var request_count = {{ stats_data }}[5]
-      // var active_count = {{ stats_data }}[6]
+      var size_count = {{ stat_data }}[1]
+      var miss_rate = {{ stat_data }}[2]
+      var hit_rate = {{ stat_data }}[3]
+      var key_count = {{ stat_data }}[4]
+      var request_count = {{ stat_data }}[5]
+      // var active_count = {{ stat_data }}[6]
 
       // Specify the configuration items and data for Size Count Chart
       var size_count_chart_options = {
