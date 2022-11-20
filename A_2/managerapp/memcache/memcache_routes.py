@@ -11,7 +11,6 @@ backend_host = 'http://0.0.0.0:5002'
 
 @memcache_routes.route('/memcache_manager', methods=['GET'])
 def memcache_manager():
-    cnx = get_db()
     max_capacity, replacement_policy, created_at, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
     return render_template('manager.html',
         max_capacity=max_capacity,
@@ -26,20 +25,20 @@ def memcache_manager():
 def memcache_properties():
     global backend_host
     if request.method == 'POST':
-        new_cap = request.form.get('capacity')
-        if new_cap.isdigit() and int(new_cap) <= 500:
+        new_capacity = request.form.get('max_capacity')
+        if new_capacity.isdigit() and int(new_capacity) <= 500:
             new_policy = request.form.get('replacement_policy')
             new_time = time.time()
             req = {
-                'max_capacity': new_cap, 
+                'max_capacity': new_capacity, 
                 'replacement_policy': new_policy, 
                 'created_at': new_time
             }
             resp = requests.post(backend_host + '/refresh_configuration', json=req)
-            capacity, replacement_policy, created_at, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
+            max_capacity, replacement_policy, created_at, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
             if resp.json() == 'OK':
                 return render_template('manager.html',
-                capacity=capacity,
+                max_capacity=max_capacity,
                 replacement_policy=replacement_policy,
                 created_at=created_at,
                 memcache_pool=memcache_pool,
@@ -48,9 +47,9 @@ def memcache_properties():
                 cache_policy=cache_policy)
              
         # On error, reset to old params
-        capacity, replacement_policy, created_at, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
+        max_capacity, replacement_policy, created_at, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
         return render_template('manager.html',
-                capacity=capacity,
+                max_capacity=max_capacity,
                 replacement_policy=replacement_policy,
                 created_at=created_at,
                 memcache_pool=memcache_pool,
@@ -60,9 +59,9 @@ def memcache_properties():
                 cache_policy=cache_policy)
         
     # On GET
-    capacity, replacement_policy, created_at, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
+    max_capacity, replacement_policy, created_at, memcache_pool, node_data, pool_params, cache_policy = format_cache_settings()
     return render_template('manager.html',
-            capacity=capacity,
+            max_capacity=max_capacity,
             replacement_policy=replacement_policy,
             created_at=created_at,
             memcache_pool=memcache_pool,
