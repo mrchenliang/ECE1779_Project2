@@ -45,7 +45,7 @@ def image():
             # queries the database images by specific key
             cnx = get_db()
             cursor = cnx.cursor(buffered=True)
-            query = 'SELECT images.location FROM images where images.key = %s'
+            query = 'SELECT images.key FROM images where images.key = %s'
             cursor.execute(query, (key_value,))
             # if the image is found
             if cursor._rowcount:
@@ -53,6 +53,8 @@ def image():
                 cnx.close()
                 # download image
                 image = download_image(key_value)
+                if image == 'Image Not Found in S3':
+                    return render_template('image.html', exists=False, image='does not exist')
                 request_json = { 
                     key_value: image 
                 }
