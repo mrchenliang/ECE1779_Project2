@@ -9,7 +9,7 @@ memcache_pool = {
     "i-067ee0ffdf31ca474": None,
     "i-033d4ce97a7e3f234": None,
     "i-0a7a70f7ed4da4cbc": None,
-    "i-0f2bcbfa2224b03df": None
+    "i-062be943d0df0ee8a": None
 }
 from backend import main
 from backend.AWS_Log_operator import thread_stats
