@@ -1,5 +1,5 @@
-import mysql.connector
 from flask import g
+import mysql.connector
 import os, requests, json
 resp = requests.get("http://169.254.169.254/latest/user-data")
 config = json.loads(resp.content.decode('utf-8'))

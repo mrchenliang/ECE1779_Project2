@@ -77,7 +77,7 @@ def get_pool_ready_count():
 
 
 def get_memcache_policy():
-    cnx = get_db()
+    cnx = connect_to_database()
     cursor = cnx.cursor(buffered = True)
     query = '''SELECT * FROM cache_policies WHERE id = (SELECT MAX(id) FROM cache_policies LIMIT 1)'''
     cursor.execute(query)
