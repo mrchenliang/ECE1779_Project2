@@ -225,7 +225,7 @@ def format_cache_settings(cache_policy=None):
         if pool_params['mode'] == 'automatic':
             cnx = get_db()
             cursor = cnx.cursor(buffered=True)
-            query = '''SELECT * FROM cache_policies WHERE param_key = (SELECT MAX(id) FROM cache_policies LIMIT 1)'''
+            query = '''SELECT * FROM cache_policies WHERE id = (SELECT MAX(id) FROM cache_policies LIMIT 1)'''
             cursor.execute(query)
             if(cursor._rowcount):# if key exists in db
                 cache_policy=cursor.fetchone()
