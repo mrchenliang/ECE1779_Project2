@@ -79,9 +79,9 @@ def start_instance(instance_id):
             print("Not started yet")
             time.sleep(2)
             resp = ec2.describe_instances(InstanceIds=[instance_id], DryRun=False)
-            inst_name = response['Reservations'][0]['Instances'][0]['State']['Name']
+            inst_name = resp['Reservations'][0]['Instances'][0]['State']['Name']
         print("+++++++++Started!!!+++++++++++")
-        ip_address = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
+        ip_address = resp['Reservations'][0]['Instances'][0]['PublicIpAddress']
         execute_command_to_start_memcache(ip_address)
     except ClientError as e:
         print(e)
