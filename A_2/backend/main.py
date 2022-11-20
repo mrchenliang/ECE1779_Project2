@@ -3,6 +3,7 @@ from flask import request
 from backend import AWS_EC2_operator
 from frontend.database_helper import get_db 
 from backend.AWS_S3_operator import clear_images
+from managerapp.constants import default_max_capacity, default_replacement_policy
 import json, time, requests, datetime
 import hashlib
 
@@ -33,7 +34,7 @@ def get_response(input=False):
 def get_cache_response():
     cache_properties = get_memcache_properties()
     response = webapp.response_class(
-        response=json.dumps(cache_properties),
+        response=json.dumps(cache_properties, indent=4, sort_keys=True, default=str),
         status=200,
         mimetype='application/json'
     )
@@ -143,7 +144,7 @@ def ready_request():
     memcache_pool[req_json['instance_id']] = req_json['ip_address']
     print('New Memcache Host address:' + memcache_pool[req_json['instance_id']])
     notify = node_states()
-    jsonReq={"message":notify}
+    jsonReq={"message": notify}
     try:
         resp = requests.post("http://0.0.0.0:5000/show_notification", json=jsonReq)
     except:
@@ -200,7 +201,7 @@ def get_cache_info():
         'pool_params': pool_params 
     }
     return webapp.response_class(
-        response=json.dumps(data),
+        response=json.dumps(data, indent=4, sort_keys=True, default=str),
         status=200,
         mimetype='application/json'
     )
@@ -299,9 +300,9 @@ def hash_key():
 
 
 cache_properties = {
-    'created_at': time.time(),
-    'max_capacity': 10,
-    'replacement_policy': 'Least Recently Used'
+    'created_at': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    'max_capacity': default_max_capacity,
+    'replacement_policy':  default_replacement_policy,
 }
 
 
