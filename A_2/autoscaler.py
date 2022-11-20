@@ -109,7 +109,9 @@ def auto_scaler():
                 # Miss rate is none, when no logs have been printed for this time period
                 if not miss_rate == None:
                     cache_policy = get_memcache_policy()
+                    print("--------------------------------")
                     print(cache_policy)
+                    print("--------------------------------")
                     if not cache_policy == None:
                         if miss_rate > cache_policy[1]:
                             # Max Miss Rate, Scale up instances
