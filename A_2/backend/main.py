@@ -271,7 +271,7 @@ def clear_cache_pool():
 def clear_data():
     cnx = get_db()
     cursor = cnx.cursor(buffered = True)
-    query_del = ''' DELETE * from images; '''
+    query_del = ''' DELETE from images; '''
     cursor.execute(query_del)
     cnx.commit()
 
