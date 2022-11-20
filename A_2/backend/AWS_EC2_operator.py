@@ -49,8 +49,9 @@ def instance_status_check(instance_id):
 
 
 def execute_command_to_start_memcache(ipv4):
-    print(os.system("ssh -i ~/ECE1779_Project2/Brianqjn.pem ubuntu@%s" % ipv4))
+    print(os.system("ssh -o 'StrictHostKeyChecking no' -i /home/ubuntu/Brianqjn.pem ubuntu@%s" % ipv4))
     print(os.system("python3 ~/ECE1779_Project2/A_2/run_memcache.py"))
+    print(os.system("exit"))
 
 
 def start_instance(instance_id):
