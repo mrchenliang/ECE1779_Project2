@@ -35,8 +35,11 @@ def image():
         }
         resp = requests.get(backend_host + '/hash_key', json=request_json)
         dictionary = json.loads(resp.content.decode('utf-8'))
+        print(dictionary)
         ip=dictionary[1]
+        print(ip)
         res = requests.post('http://'+ str(ip) + ':5000/get_from_memcache', json=request_json)
+        print(res.text)
         # if the image is not by the key in the memcache
         if res.text == 'Key Not Found' or res == None:
             # queries the database images by specific key
