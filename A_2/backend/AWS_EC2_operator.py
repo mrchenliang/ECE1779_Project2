@@ -47,6 +47,18 @@ def instance_status_check(instance_id):
     memcache_pool[instance_id] = None
 
 
+def execute_linux_command_in_EC2(client, command, instance_id):
+    """
+    Using the function to execute the command in the ec2 instance
+    """
+    response = client.send_command(
+        DocumentName="AWS-RunShellScript", # One of AWS' preconfigured documents
+        Parameters={'commands': command},
+        InstanceIds=instance_id,
+    )
+    return response
+
+
 def start_instance(instance_id):
     """
     Using the function to start an instance
@@ -65,6 +77,14 @@ def start_instance(instance_id):
         response = ec2.start_instances(InstanceIds=[instance_id], DryRun=False)
         print(response)
         print("Start instance %s successfully" % instance_id)
+        # Using to start the memcache service in a new EC2 instance
+        ssm_client = boto3.client('ssm')
+        command = ['python3 ECE1779_Project2/A_2/run_memcache.py']
+        instance_id_to_start_memcache = [instance_id]
+        resp = execute_linux_command_in_EC2()
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print("The linux command execution status is: %s" % resp)
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     except ClientError as e:
         print(e)
 
