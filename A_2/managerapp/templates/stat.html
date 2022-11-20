@@ -11,7 +11,7 @@
     <h2>Memcache Manager Stats</h2>
     <div id="wrapper" style="margin-top: 20px">
       <div class="form-row" style="justify-content:center">
-        <!-- <div id="active_count_chart" style="width: 600px;height:500px;"></div> -->
+        <div id="active_count_chart" style="width: 600px;height:500px;"></div>
         <div id="request_count_chart" style="width: 600px;height:500px;"></div>
         </div>
       <div class="form-row" style="justify-content:center">
@@ -30,7 +30,7 @@
       var hit_rate_chart = echarts.init(document.getElementById('hit_rate_chart'));
       var key_count_chart = echarts.init(document.getElementById('key_count_chart'));
       var request_count_chart = echarts.init(document.getElementById('request_count_chart'));
-      // var active_count_chart = echarts.init(document.getElementById('active_count_chart'));
+      var active_count_chart = echarts.init(document.getElementById('active_count_chart'));
 
       var stat_data = JSON.parse('{{ stat_data | tojson | safe}}')
      
@@ -46,8 +46,7 @@
       var hit_rate = {{ stat_data }}[3]
       var key_count = {{ stat_data }}[4]
       var request_count = {{ stat_data }}[5]
-      // var active_count = {{ stat_data }}[6]
-      console.log(request_count, key_count, hit_rate, miss_rate, size_count, dates)
+      var active_count = {{ stat_data }}[6]
 
       // Specify the configuration items and data for Size Count Chart
       var size_count_chart_options = {
@@ -279,50 +278,50 @@
       };
 
       // Specify the configuration items and data for Active Count Chart
-      // var active_count_chart_options = {
-      //   title: {
-      //     display: true,
-      //     text: 'Average Cache Pool Size',
-      //   },
-      //   color: ['#37A2FF', '#FF0087', '#FFBF00'],
-      //   xAxis: {
-      //     type: 'category',
-      //     data: dates
-      //   },
-      //   tooltip: {
-      //     trigger: 'axis',
-      //     axisPointer: {
-      //       type: 'cross',
-      //       label: {
-      //         backgroundColor: '#6a7985'
-      //       }
-      //     }
-      //   },
-      //   yAxis: {
-      //     type: 'value'
-      //   },
-      //   series: [
-      //     {
-      //       data: active_count,
-      //       type: 'line',
-      //       areaStyle: {
-      //         opacity: 0.8,
-      //         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-      //           {
-      //             offset: 0,
-      //             color: 'rgb(34, 147, 240)'
-      //           },
-      //           {
-      //             offset: 1,
-      //             color: 'rgb(17, 79, 130)'
-      //           }
-      //         ])
-      //       },
-      //       smooth: true,
-      //       animation: false
-      //     }
-      //   ]
-      // };
+      var active_count_chart_options = {
+        title: {
+          display: true,
+          text: 'Average Cache Pool Size',
+        },
+        color: ['#37A2FF', '#FF0087', '#FFBF00'],
+        xAxis: {
+          type: 'category',
+          data: dates
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: active_count,
+            type: 'line',
+            areaStyle: {
+              opacity: 0.8,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: 'rgb(34, 147, 240)'
+                },
+                {
+                  offset: 1,
+                  color: 'rgb(17, 79, 130)'
+                }
+              ])
+            },
+            smooth: true,
+            animation: false
+          }
+        ]
+      };
 
       // Display the chart using the configuration items and data just specified.
       size_count_chart.setOption(size_count_chart_options);
@@ -330,7 +329,7 @@
       hit_rate_chart.setOption(hit_rate_chart_options);
       key_count_chart.setOption(key_count_chart_options);
       request_count_chart.setOption(request_count_chart_options);
-      // active_count_chart.setOption(active_count_chart_options);
+      active_count_chart.setOption(active_count_chart_options);
     </script>
   </body>
 </html>
