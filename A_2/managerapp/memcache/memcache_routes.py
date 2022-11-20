@@ -3,6 +3,7 @@ from flask import Blueprint
 import requests, time
 from flask import render_template, request, redirect
 from managerapp.database_helper import get_db
+from managerapp.constants import default_max_capacity, default_replacement_policy
 
 memcache_routes = Blueprint("memcache_routes", __name__)
 
@@ -185,9 +186,9 @@ def format_cache_settings(cache_policy=None):
     res = requests.get(backend_host + '/get_cache_info')
     print(res.json())
     memcache_pool = res.json()['memcache_pool']
-    max_capacity = res.json()['cache_properties']['max_capacity']
-    replacement_policy = res.json()['cache_properties']['replacement_policy']
-    created_at = time.ctime(res.json()['cache_properties']['created_at'])
+    max_capacity = res.json()['cache_properties']['max_capacity'] or default_max_capacity
+    replacement_policy = res.json()['cache_properties']['replacement_policy'] or default_replacement_policy
+    created_at = time.ctime(res.json()['cache_properties']['created_at']) or time.time()
     pool_params = res.json()['pool_params']
 
     i = 1
