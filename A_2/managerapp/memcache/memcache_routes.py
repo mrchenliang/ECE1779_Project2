@@ -187,7 +187,7 @@ def format_cache_settings(cache_policy=None):
     memcache_pool = res.json()['memcache_pool']
     max_capacity = res.json()['cache_properties']['max_capacity'] 
     replacement_policy = res.json()['cache_properties']['replacement_policy'] 
-    created_at = time.ctime(res.json()['cache_properties']['created_at']) 
+    created_at = res.json()['cache_properties']['created_at']
     pool_params = res.json()['pool_params']
 
     i = 1
