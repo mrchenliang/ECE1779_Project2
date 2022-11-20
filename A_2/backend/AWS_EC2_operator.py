@@ -71,18 +71,6 @@ def start_instance(instance_id):
         response = ec2.start_instances(InstanceIds=[instance_id], DryRun=False)
         print(response)
         print("Start instance %s successfully" % instance_id)
-        # Using to start the memcache service in a new EC2 instance
-        resp = ec2.describe_instances(InstanceIds=[instance_id], DryRun=False)
-        inst_name = resp['Reservations'][0]['Instances'][0]['State']['Name']
-        while inst_name != "running":
-            print("+++++++++++++++++++++++++++++++++++++++++++")
-            print("Not started yet")
-            time.sleep(2)
-            resp = ec2.describe_instances(InstanceIds=[instance_id], DryRun=False)
-            inst_name = resp['Reservations'][0]['Instances'][0]['State']['Name']
-        print("+++++++++Started!!!+++++++++++")
-        ip_address = resp['Reservations'][0]['Instances'][0]['PublicIpAddress']
-        execute_command_to_start_memcache(ip_address)
     except ClientError as e:
         print(e)
 
@@ -136,6 +124,9 @@ def update_memcache_pool_status():
                 ip_address = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
                 memcache_pool[instance] = ip_address
                 running_node_count += 1
+                print("--------------------------------Starting the memcache in EC2--------------------------------")
+                execute_command_to_start_memcache(ip_address)
+                print("--------------------------------Started the memcache in EC2!!--------------------------------")
             elif inst_name == 'shutting-down' or inst_name == 'stopping':
                 memcache_pool[instance] = 'Stopping'
             elif  inst_name == 'pending':
