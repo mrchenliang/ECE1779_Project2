@@ -8,5 +8,4 @@ stat_routes = Blueprint("stat_routes", __name__)
 def memcache_stats():
     stat_data = get_stat_logs()
     stat_data = json.dumps(stat_data)
-    print(stat_data)
     return render_template('stat.html', stat_data=stat_data)
