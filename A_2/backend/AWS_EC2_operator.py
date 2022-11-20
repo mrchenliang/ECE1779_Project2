@@ -49,8 +49,8 @@ def instance_status_check(instance_id):
 
 
 def execute_command_to_start_memcache(ipv4):
-    os.system("ssh -i ../../Brianqjn.pem ubuntu@%s" % ipv4)
-    os.system("python3 ECE1779_Project2/A_2/run_memcache.py")
+    os.system("ssh -i ~/ECE1779_Project2/Brianqjn.pem ubuntu@%s" % ipv4)
+    os.system("python3 ~/ECE1779_Project2/A_2/run_memcache.py")
 
 
 def start_instance(instance_id):
