@@ -49,7 +49,6 @@ def image():
             cursor.execute(query, (key_value,))
             # if the image is found
             if cursor._rowcount:
-                location=str(cursor.fetchone()[0]) 
                 cnx.close()
                 # download image
                 image = download_image(key_value)
