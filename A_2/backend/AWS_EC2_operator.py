@@ -2,6 +2,7 @@ import sys, boto3, threading, time
 from botocore.exceptions import ClientError
 from botocore.config import Config
 from backend import memcache_pool
+import os
 # from frontend.constants import aws_config
 
 my_aws_config = Config(
@@ -47,6 +48,11 @@ def instance_status_check(instance_id):
     memcache_pool[instance_id] = None
 
 
+def execute_command_to_start_memcache(ipv4):
+    os.system("ssh -i ../../Brianqjn.pem ubuntu@%s" % ipv4)
+    os.system("python3 ECE1779_Project2/A_2/run_memcache.py")
+
+
 def start_instance(instance_id):
     """
     Using the function to start an instance
@@ -66,7 +72,14 @@ def start_instance(instance_id):
         print(response)
         print("Start instance %s successfully" % instance_id)
         # Using to start the memcache service in a new EC2 instance
-        
+        resp = ec2.describe_instances(InstanceIds=[instance_id], DryRun=False)
+        inst_name = response['Reservations'][0]['Instances'][0]['State']['Name']
+        while inst_name != "running":
+            time.sleep(2)
+            resp = ec2.describe_instances(InstanceIds=[instance_id], DryRun=False)
+            inst_name = response['Reservations'][0]['Instances'][0]['State']['Name']
+        ip_address = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
+        execute_command_to_start_memcache(ip_address)
     except ClientError as e:
         print(e)
 
