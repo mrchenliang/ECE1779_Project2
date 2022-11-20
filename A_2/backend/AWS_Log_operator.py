@@ -61,7 +61,8 @@ def get_aggregate_statistics():
         'size_count': 0,
         'request_count': 0,
         'miss_rate': 0,
-        'hit_rate': 0
+        'hit_rate': 0,
+        'active_node_count': 0
     }
     # Iterate the memcache in the pool to update the statistics
     for host in memcache_pool:
@@ -91,7 +92,8 @@ def get_aggregate_statistics():
             'size_count': statistics['size_count']/active_node_count,
             'request_count': statistics['request_count']/active_node_count,
             'miss_rate': statistics['miss_rate']/active_node_count,
-            'hit_rate': statistics['hit_rate']/active_node_count
+            'hit_rate': statistics['hit_rate']/active_node_count,
+            'active_node_count': active_node_count
         }
 
         pre_stats['miss_rate'] = statistics['miss_rate']
@@ -104,7 +106,8 @@ def get_aggregate_statistics():
         'size_count': 0,
         'request_count': 0,
         'miss_rate': 0,
-        'hit_rate': 0
+        'hit_rate': 0,
+        'active_node_count': 0
     }
     return statistics
 
