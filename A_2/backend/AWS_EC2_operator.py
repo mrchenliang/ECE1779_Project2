@@ -49,7 +49,7 @@ def instance_status_check(instance_id):
 
 
 def execute_command_to_start_memcache(ipv4):
-    print(os.system("ssh -tt -o 'StrictHostKeyChecking no' -i /home/ubuntu/Brianqjn.pem ubuntu@%s << remotessh" % ipv4))
+    print(os.system("ssh -tt -o 'StrictHostKeyChecking no' -i /home/ubuntu/Brianqjn.pem ubuntu@%s" % ipv4))
     print(os.system("python3 ~/ECE1779_Project2/A_2/run_memcache.py << remotessh"))
     print(os.system("exit << remotessh"))
 
@@ -125,9 +125,6 @@ def update_memcache_pool_status():
                 ip_address = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
                 memcache_pool[instance] = ip_address
                 running_node_count += 1
-                print("--------------------------------Starting the memcache in EC2--------------------------------")
-                execute_command_to_start_memcache(ip_address)
-                print("--------------------------------Started the memcache in EC2!!--------------------------------")
             elif inst_name == 'shutting-down' or inst_name == 'stopping':
                 memcache_pool[instance] = 'Stopping'
             elif  inst_name == 'pending':
