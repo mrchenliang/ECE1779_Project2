@@ -5,6 +5,7 @@ from frontend.database_helper import get_db
 from backend.AWS_S3_operator import clear_images
 import json, time, requests, threading
 import hashlib
+from backend.constants import max_capacity, replacement_policy
 
 stat = ["Starting", "Stopping"]
 
@@ -59,7 +60,11 @@ def get_memcache_properties():
                 'replacement_policy': cache_properties[2]
             }
             return cache_dict
-        return None
+        return {
+            'created_at': time.time(),
+            'max_capacity': max_capacity,
+            'replacement_policy': replacement_policy
+        }
     except:
         return None
 
