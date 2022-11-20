@@ -6,6 +6,23 @@
 </head> 
 <html>
   <body>
+
+    {% include "navbar.html" %}
+    <h2>Memcache Manager Stats</h2>
+    <div id="wrapper" style="margin-top: 20px">
+      <div class="form-row" style="justify-content:center">
+        <!-- <div id="active_count_chart" style="width: 600px;height:500px;"></div> -->
+        <div id="request_count_chart" style="width: 600px;height:500px;"></div>
+        </div>
+      <div class="form-row" style="justify-content:center">
+        <div id="hit_rate_chart" style="width: 600px;height:500px;"></div>
+        <div id="miss_rate_chart" style="width: 600px;height:500px;"></div>
+      </div>
+      <div class="form-row" style="justify-content:center">
+        <div id="size_count_chart" style="width: 600px;height:500px;"></div>
+        <div id="key_count_chart" style="width: 600px;height:500px;"></div>
+      </div>
+    </div>
     <script type="text/javascript">
       // Initialize the echarts instance based on the prepared dom
       var size_count_chart = echarts.init(document.getElementById('size_count_chart'));
@@ -314,22 +331,5 @@
       request_count_chart.setOption(request_count_chart_options);
       // active_count_chart.setOption(active_count_chart_options);
     </script>
-    {% include "navbar.html" %}
-    <h2>Memcache Manager Stats</h2>
-    <div id="wrapper" style="margin-top: 20px">
-      <div class="form-row" style="justify-content:center">
-        <!-- <div id="active_count_chart" style="width: 600px;height:500px;"></div> -->
-        <div id="request_count_chart" style="width: 600px;height:500px;"></div>
-        </div>
-      <div class="form-row" style="justify-content:center">
-        <div id="hit_rate_chart" style="width: 600px;height:500px;"></div>
-        <div id="miss_rate_chart" style="width: 600px;height:500px;"></div>
-      </div>
-      <div class="form-row" style="justify-content:center">
-        <div id="size_count_chart" style="width: 600px;height:500px;"></div>
-        <div id="key_count_chart" style="width: 600px;height:500px;"></div>
-      </div>
-    </div>
-    
   </body>
 </html>
