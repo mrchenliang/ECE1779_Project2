@@ -90,9 +90,9 @@ def get_statistics():
     statistics = {
         'size_count': config.memcache_obj.current_size, 
         'request_count': config.memcache_obj.request_count,
-        'miss_rate': config.memcache_obj.miss,
+        'miss_rate': config.memcache_obj.miss / config.memcache_obj.request_count,
         'key_count': config.memcache_obj.currsize,
-        'hit_rate': config.memcache_obj.hit
+        'hit_rate': config.memcache_obj.hit / config.memcache_obj.request_count
     }
     response = webapp.response_class(
             response=json.dumps(statistics),
