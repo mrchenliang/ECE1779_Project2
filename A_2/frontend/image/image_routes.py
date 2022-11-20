@@ -48,7 +48,7 @@ def image():
             if cursor._rowcount:
                 location=str(cursor.fetchone()[0]) 
                 cnx.close()
-                # convert the image to Base64
+                # download image
                 image = download_image(key_value)
                 request_json = { 
                     key_value: image 
@@ -56,7 +56,7 @@ def image():
                 # put the key and image into the memcache
                 res = requests.post('http://'+ str(ip) + ':5000/put_into_memcache', json=request_json)
                 # returns view image page
-                return render_template('image.html', exists=True, image=base64_image)
+                return render_template('image.html', exists=True, image=image)
             else:
                 return render_template('image.html', exists=False, image='does not exist')
         else:
