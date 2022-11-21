@@ -92,6 +92,9 @@ def get_memcache_policy():
 def auto_scaler():
     global backend
 
+    print("----------------------------------------------------------------")
+    print("Into the auto_scaler")
+    print("----------------------------------------------------------------")
     while (True):
         resp = requests.get(backend + "/get_memcache_pool_config")
         pool_params = json.loads(resp.content.decode('utf-8'))
