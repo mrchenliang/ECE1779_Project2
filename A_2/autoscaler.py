@@ -96,6 +96,9 @@ def auto_scaler():
     print("Into the auto_scaler")
     print("----------------------------------------------------------------")
     while (True):
+        print("----------------------------------------------------------------")
+        print("Into the auto_scaler while loop")
+        print("----------------------------------------------------------------")
         resp = requests.get(backend + "/get_memcache_pool_config")
         pool_params = json.loads(resp.content.decode('utf-8'))
         print(pool_params)
