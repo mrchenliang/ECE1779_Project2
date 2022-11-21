@@ -1,5 +1,5 @@
 #!/bin/sh
-cd /home/ubuntu/A_2
+cd /home/ubuntu/ECE1779_Project2/A_2
 pip install flask
 pip install cachetools
 pip install boto3
