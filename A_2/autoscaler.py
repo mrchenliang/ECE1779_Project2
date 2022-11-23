@@ -4,7 +4,7 @@ from botocore.exceptions import ClientError
 from botocore.config import Config
 from database_helper import *
 
-memcache_node = ["i-0ca59c2326be01a9b","i-034ee52984dc9bd2e","i-0972b8c8d8d577ec0","i-07a760bbdad228a87","i-067ee0ffdf31ca474","i-033d4ce97a7e3f234","i-0a7a70f7ed4da4cbc","i-062be943d0df0ee8a"]
+memcache_node = ["i-026378511df9449aa","i-034ee52984dc9bd2e","i-0972b8c8d8d577ec0","i-07a760bbdad228a87","i-067ee0ffdf31ca474","i-033d4ce97a7e3f234","i-0a7a70f7ed4da4cbc","i-062be943d0df0ee8a"]
 
 resp = requests.get("http://169.254.169.254/latest/user-data")
 config = json.loads(resp.content.decode('utf-8'))
