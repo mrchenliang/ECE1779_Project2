@@ -22,7 +22,8 @@ class LRUMemCache(LRUCache):
     
     def pushitem(self, key, value):
         response = self.__setitem__(key, value)
-        self.request_count += 1
+        # comment this part because the TA said the push request doesn't count in the statistics
+        # self.request_count += 1
         return response
 
     def updateitem(self, key, new_value):
@@ -115,7 +116,8 @@ class RRMemCache(RRCache):
     
     def pushitem(self, key, value):
         response = self.__setitem__(key, value)
-        self.request_count += 1
+        # comment this part because the TA said the push request doesn't count in the statistics
+        # self.request_count += 1
         return response
 
     def updateitem(self, key, new_value):
